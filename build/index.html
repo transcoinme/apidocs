@@ -209,7 +209,7 @@
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo-869cdda3.png" class="logo" alt="" />
+      <img src="images/logo-8a9c052f.png" class="logo" alt="" />
         <div class="lang-selector">
               <a href="#" data-language-name="curl examples">curl examples</a>
         </div>
@@ -624,13 +624,14 @@ should be added to the request method header. The sign is formed by receiving th
 </blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://merch.transcoin.me/api/process/getCalcData</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span> <span class="p">}</span> <span class="err">\</span> 
 
 </code></pre></div>
 <blockquote>
 </blockquote>
 
 <p>Method provides data for the preliminary calculation of the transaction (payment amounts and commissions).
-This method does not require input data and returns response a string in json format.</p>
+This method require your partner_id as input data and returns response a string in json format.</p>
 
 <p>Method response returns a fairly large array of data:</p>
 
@@ -639,11 +640,8 @@ This method does not require input data and returns response a string in json fo
 </blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
    <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
-   <span class="dl">"</span><span class="s2">current_step</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">start_page</span><span class="dl">"</span><span class="p">,</span>
-   <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">""</span><span class="p">,</span>
-   <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
-      <span class="dl">"</span><span class="s2">buy_payment_methods</span><span class="dl">"</span><span class="p">:[</span>
-         <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">buy_payment_methods</span><span class="dl">"</span><span class="p">:[</span>
+        <span class="p">{</span>
             <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
             <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank Card</span><span class="dl">"</span><span class="p">,</span>
             <span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.55</span><span class="dl">"</span><span class="p">,</span>
@@ -654,40 +652,39 @@ This method does not require input data and returns response a string in json fo
             <span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">25000</span><span class="dl">"</span><span class="p">,</span>
             <span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50000</span><span class="dl">"</span><span class="p">,</span>
             <span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10</span><span class="dl">"</span>
-         <span class="p">}</span>
+        <span class="p">}</span>
       <span class="p">],</span>
-      <span class="dl">"</span><span class="s2">valuts</span><span class="dl">"</span><span class="p">:[</span>
-         <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">valuts</span><span class="dl">"</span><span class="p">:[</span>
+        <span class="p">{</span>
             <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
             <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">USD</span><span class="dl">"</span><span class="p">,</span>
             <span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
             <span class="dl">"</span><span class="s2">number_format</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
             <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span>
-         <span class="p">}</span>
+        <span class="p">}</span>
       <span class="p">],</span>
-      <span class="dl">"</span><span class="s2">crypto_valuts</span><span class="dl">"</span><span class="p">:[</span>
-         <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">crypto_valuts</span><span class="dl">"</span><span class="p">:[</span>
+        <span class="p">{</span>
             <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
             <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
             <span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.001</span><span class="dl">"</span><span class="p">,</span>
             <span class="dl">"</span><span class="s2">number_format</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">5</span><span class="dl">"</span><span class="p">,</span>
             <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">74.810473486663</span><span class="dl">"</span>
-         <span class="p">}</span>
+        <span class="p">}</span>
       <span class="p">],</span>
-      <span class="dl">"</span><span class="s2">comissions</span><span class="dl">"</span><span class="p">:{</span>
-         <span class="dl">"</span><span class="s2">sum_res_nocom</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
-         <span class="dl">"</span><span class="s2">sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
-         <span class="dl">"</span><span class="s2">sum_res</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
-         <span class="dl">"</span><span class="s2">pay_methods_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.55</span><span class="dl">"</span><span class="p">,</span>
-         <span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
-         <span class="dl">"</span><span class="s2">valut_com</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.0001</span><span class="p">,</span>
-         <span class="dl">"</span><span class="s2">metod_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank Card</span><span class="dl">"</span><span class="p">,</span>
-         <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">74.81BTC</span><span class="dl">"</span><span class="p">,</span>
-         <span class="dl">"</span><span class="s2">minmax</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50 - 3000</span><span class="dl">"</span><span class="p">,</span>
-         <span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span>
-         <span class="dl">"</span><span class="s2">max</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3000</span><span class="dl">"</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
+    <span class="dl">"</span><span class="s2">comissions</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">sum_res_nocom</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_res</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_methods_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.55</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">valut_com</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.0001</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">metod_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank Card</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">74.81BTC</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">minmax</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50 - 3000</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">max</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3000</span><span class="dl">"</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 <blockquote>
@@ -859,7 +856,7 @@ parameters json string with the following fields:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://merch.transcoin.me/api/process/getCalcComissions/</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
-  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span><span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">21</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200</span><span class="dl">"</span><span class="p">}</span><span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span><span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">21</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">}</span><span class="o">\</span>
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -899,6 +896,20 @@ parameters json string with the following fields:</p>
 <td>amount</td>
 <td>float</td>
 <td>Transaction Amount (may be zero)</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>amount</td>
+<td>float</td>
+<td>Transaction Amount (may be zero)</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Partner ID in our system (required)</td>
 <td></td>
 </tr>
 </tbody></table>

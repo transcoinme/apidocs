@@ -179,12 +179,13 @@ The structure of the negative response is identical to that described above.
 ```javascript
 curl 'https://merch.transcoin.me/api/process/getCalcData' \
   -H 'Content-Type: application/json' \
+  --data { "partner_id":<your ID> } \ 
  
 ```
 >
 
 Method provides data for the preliminary calculation of the transaction (payment amounts and commissions).
-This method does not require input data and returns response a string in json format.
+This method require your partner_id as input data and returns response a string in json format.
  
 Method response returns a fairly large array of data:
 
@@ -193,55 +194,51 @@ Method response returns a fairly large array of data:
 ```javascript
 {
    "result":true,
-   "current_step":"start_page",
-   "message":"",
-   "data":{
-      "buy_payment_methods":[
-         {
-            "id":"2",
-            "name":"Bank Card",
-            "com":"3.55",
-            "our_com":"2",
-            "min":"50",
-            "lim":"3000",
-            "enable_mes":"1",
-            "lim_day":"25000",
-            "lim_month":"50000",
-            "lim_count":"10"
-         }
+	"buy_payment_methods":[
+		{
+		    "id":"2",
+			"name":"Bank Card",
+			"com":"3.55",
+			"our_com":"2",
+			"min":"50",
+			"lim":"3000",
+			"enable_mes":"1",
+			"lim_day":"25000",
+			"lim_month":"50000",
+			"lim_count":"10"
+		}
       ],
-      "valuts":[
-         {
+    "valuts":[
+        {
             "id":"1",
             "name":"USD",
             "com":"0",
             "number_format":"2",
             "reserv":"100"
-         }
+        }
       ],
-      "crypto_valuts":[
-         {
+    "crypto_valuts":[
+        {
             "id":"3",
             "name":"BTC",
             "com":"0.001",
             "number_format":"5",
             "reserv":"74.810473486663"
-         }
+        }
       ],
-      "comissions":{
-         "sum_res_nocom":0,
-         "sum":0,
-         "sum_res":0,
-         "pay_methods_com":"3.55",
-         "our_com":"2",
-         "valut_com":0.0001,
-         "metod_name":"Bank Card",
-         "reserv":"74.81BTC",
-         "minmax":"50 - 3000",
-         "min":"50",
-         "max":"3000"
-      }
-   }
+    "comissions":{
+        "sum_res_nocom":0,
+        "sum":0,
+        "sum_res":0,
+        "pay_methods_com":"3.55",
+        "our_com":"2",
+        "valut_com":0.0001,
+        "metod_name":"Bank Card",
+        "reserv":"74.81BTC",
+        "minmax":"50 - 3000",
+        "min":"50",
+        "max":"3000"
+    }
 }
 ```
 >
@@ -280,7 +277,7 @@ parameters json string with the following fields:
 ```javascript
 curl 'https://merch.transcoin.me/api/process/getCalcComissions/' \
   -H 'Content-Type: application/json' \
-  --data {"from":"2","to":"3","method":"21","amount":"200"}\
+  --data {"from":"2","to":"3","method":"21","amount":"200","partner_id":<your ID>}\
 ```
 >
   
@@ -290,6 +287,8 @@ curl 'https://merch.transcoin.me/api/process/getCalcComissions/' \
 | 2 | to     		 | int   | cryptocurrency identifier in our system    |   |
 | 3 | method 		 | int   | method identifier in our system            |   |
 | 4 | amount 		 | float | Transaction Amount (may be zero)           |   |  
+| 4 | amount 		 | float | Transaction Amount (may be zero)           |   |  
+| 5 | partner_id     | int   | Partner ID in our system (required)        |   |
  
 You will receive the answer as follows:
 
