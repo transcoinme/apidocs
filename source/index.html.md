@@ -46,7 +46,7 @@ Parameters for the request type = 'merchant':
 > Example of process request type = 'merchant' 
  
 ```javascript
-curl 'https://merch.transcoin.me/api/process/' \
+curl 'https://api.transcoin.io/v1/process/' \
   -H 'Content-Type: application/json' \
   -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
   --data {
@@ -127,7 +127,7 @@ Description request type='exchange':
 > Request type='exchange' example
  
 ```javascript
-curl 'https://merch.transcoin.me/api/process/' \
+curl 'https://api.transcoin.io/v1/process/' \
   -H 'Content-Type: application/json' \
   -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
   --data {
@@ -177,7 +177,7 @@ The structure of the negative response is identical to that described above.
 > Request getCalcData example
  
 ```javascript
-curl 'https://merch.transcoin.me/api/process/getCalcData' \
+curl 'https://api.transcoin.io/v1/process/getCalcData' \
   -H 'Content-Type: application/json' \
   --data { "partner_id":<your ID> } \ 
  
@@ -275,7 +275,7 @@ parameters json string with the following fields:
 > Request getCalcComissions example 
 
 ```javascript
-curl 'https://merch.transcoin.me/api/process/getCalcComissions/' \
+curl 'https://api.transcoin.io/v1/process/getCalcComissions/' \
   -H 'Content-Type: application/json' \
   --data {"from":"2","to":"3","method":"21","amount":"200","partner_id":<your ID>}\
 ```
