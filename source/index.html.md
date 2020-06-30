@@ -82,8 +82,8 @@ The method returns a response also in json format. Description of the response f
  "amount":0.02989888722560715,
  "currency":"3",
  "fee":0.0014949443612803576,
- "qrcode_url":"https://www.coinpayments.net/ -> <YOUR_API_URL>",
- "checkout_url":"https://www.coinpayments.net/ -> <YOUR_API_URL>",
+ "qrcode_url": "<YOUR_API_URL>",
+ "checkout_url":"<YOUR_API_URL>",
  "test":true
  }
 ```
