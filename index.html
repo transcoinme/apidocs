@@ -277,7 +277,7 @@ should be added to the request method header. The sign is formed by receiving th
 <blockquote>
 <p>Example of process request type = &#39;merchant&#39; </p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://merch.transcoin.me/api/process/</span><span class="dl">'</span> <span class="o">\</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
@@ -496,7 +496,7 @@ should be added to the request method header. The sign is formed by receiving th
 <blockquote>
 <p>Request type=&#39;exchange&#39; example</p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://merch.transcoin.me/api/process/</span><span class="dl">'</span> <span class="o">\</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
@@ -622,7 +622,7 @@ should be added to the request method header. The sign is formed by receiving th
 <blockquote>
 <p>Request getCalcData example</p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://merch.transcoin.me/api/process/getCalcData</span><span class="dl">'</span> <span class="o">\</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/getCalcData</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">--</span><span class="nx">data</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span> <span class="p">}</span> <span class="err">\</span> 
 
@@ -854,7 +854,7 @@ parameters json string with the following fields:</p>
 <blockquote>
 <p>Request getCalcComissions example </p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://merch.transcoin.me/api/process/getCalcComissions/</span><span class="dl">'</span> <span class="o">\</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/getCalcComissions/</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">--</span><span class="nx">data</span> <span class="p">{</span><span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">21</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">}</span><span class="o">\</span>
 </code></pre></div>
