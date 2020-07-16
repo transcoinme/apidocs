@@ -36,8 +36,9 @@ should be added to the request method header. The sign is formed by receiving th
 
 The type of operation must be specified in request parameter `type`. The `type` parameter can take such values: `merchant`, `exchange`.
 
-* `merchant` - creating a request for payment with cryptocurrency; 
+* `merchant` - creating request for payment with cryptocurrency; 
 * `exchange` - creating cryptocurrency purchase request;
+* `token`    - creating request for the purchase of tokens (game currencies);
 
 The remaining request parameters depend on the type of transaction you are creating.
 
@@ -50,14 +51,14 @@ curl 'https://api.transcoin.io/v1/process/' \
   -H 'Content-Type: application/json' \
   -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
   --data {
-	'type'          => 'merchant',
-	'project_id'    => <your project id>,
-    'amount' 		=> 200,
-    'currency'      => 'EUR',
-    'crypto_currency' => 'BTC',
-    'order_number'  => 24,
-    'description'   => 'Order Payment #24',
-    'date'          => '01-06-2020 20:39:32'} \ 
+	"type" : "merchant",
+	"project_id" : <your project id>,
+    "amount" : 200,
+    "currency" : "EUR",
+    "crypto_currency" : "BTC",
+    "order_number" : 24,
+    "description" : "Order Payment #24",
+    "date" : "01-06-2020 20:39:32"} \ 
 ```
 >
 
@@ -138,6 +139,7 @@ curl 'https://api.transcoin.io/v1/process/' \
 	"to":"3",
 	"wallet":<your wallet>,
 	"email":"your_email@example.com",
+	"order_url": "https://some-where.com",
 	"partner_id":<your ID> } \ 
 ```
 >
@@ -171,6 +173,75 @@ The method returns a response also in json format. Description of the response f
 | 2 | request_url    | string | Request URL                                           |   |
 
 The structure of the negative response is identical to that described above.
+
+Description request type='token':
+
+> Request type='token' example
+ 
+```javascript
+curl 'https://api.transcoin.io/v1/process/' \
+  -H 'Content-Type: application/json' \
+  -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
+  --data {
+	"partner_id" : "<your partner id>", 
+    "amount" : 200, 
+	"pay_type" : "card", 
+    "from" : "2", 
+	"email" : "<user email here>" 
+    "wallet" : "<your wallet here>", 
+    "order_url"	: "https://some-where.com",
+	"lang_code" : "en" } \
+```
+>
+
+| № | Parameter name  | Type   | Description                                                           |   |
+|---|-----------------|--------|-----------------------------------------------------------------------|---|
+| 1 | partner_id      | int    | Your partner ID in our system                                         |   |
+| 2 | amount          | float  | Request amount                                                        |   |
+| 3 | pay_type        | string | Optional parameter, values "card" or "bank". The default is "card"    |   |
+| 4 | from   	      | int    | Currency identifier in our system                                     |   |
+| 5 | email           | string | User email															   |   |
+| 6 | wallet          | string | User wallet                                                           |   |
+| 7 | order_url       | string | Link to the request page (optional)                                   |   |
+| 7 | lang_code       | string | Language code in ISO format  (en,ru,lv,ee)                            |   |
+
+
+The method returns a response also in json format. Description of the response for a successful outcome:
+
+> Successfull response type='token' example
+ 
+```javascript
+{ 
+	“request_url”: "<your API URL>/<your partner ID>/<request ID>/",
+	“result”: “true” 
+}
+```
+
+| № | Parameter name | Type   | Description                                           |   |
+|---|----------------|--------|-------------------------------------------------------|---|
+| 1 | result         | bool   | Accepts true if the request succeeds.                 |   |
+| 2 | request_url    | string | Request URL                                           |   |
+
+
+In case of a negative result, responce will be as follows:
+
+> Negative response example
+ 
+```javascript
+{"result":false,
+ "error":401,
+ "message":"Wrong input data",
+ }
+```
+
+>
+
+| № | Parameter name | Type   | Description                                           |   |
+|---|----------------|--------|-------------------------------------------------------|---|
+| 1 | result         | bool   | Accepts false if errors occurred during execution.    |   |
+| 2 | error          | int    | Error Code (optional)                                 |   |
+| 3 | message        | string | Error message                                         |   |
+
 
 ## Method getCalcData 
 
