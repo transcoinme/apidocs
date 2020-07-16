@@ -266,8 +266,9 @@ should be added to the request method header. The sign is formed by receiving th
 <p>The type of operation must be specified in request parameter <code>type</code>. The <code>type</code> parameter can take such values: <code>merchant</code>, <code>exchange</code>.</p>
 
 <ul>
-<li><code>merchant</code> - creating a request for payment with cryptocurrency; </li>
+<li><code>merchant</code> - creating request for payment with cryptocurrency; </li>
 <li><code>exchange</code> - creating cryptocurrency purchase request;</li>
+<li><code>token</code>    - creating request for the purchase of tokens (game currencies);</li>
 </ul>
 
 <p>The remaining request parameters depend on the type of transaction you are creating.</p>
@@ -281,14 +282,14 @@ should be added to the request method header. The sign is formed by receiving th
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
-    <span class="dl">'</span><span class="s1">type</span><span class="dl">'</span>          <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">merchant</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">project_id</span><span class="dl">'</span>    <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">project</span> <span class="nx">id</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">amount</span><span class="dl">'</span>        <span class="o">=&gt;</span> <span class="mi">200</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">currency</span><span class="dl">'</span>      <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">EUR</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">crypto_currency</span><span class="dl">'</span> <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">BTC</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">order_number</span><span class="dl">'</span>  <span class="o">=&gt;</span> <span class="mi">24</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">description</span><span class="dl">'</span>   <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">Order Payment #24</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">date</span><span class="dl">'</span>          <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">01-06-2020 20:39:32</span><span class="dl">'</span><span class="p">}</span> <span class="err">\</span> 
+    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">merchant</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">project_id</span><span class="dl">"</span> <span class="p">:</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">project</span> <span class="nx">id</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">currency</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">crypto_currency</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">order_number</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">24</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">description</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">Order Payment #24</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">date</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">01-06-2020 20:39:32</span><span class="dl">"</span><span class="p">}</span> <span class="err">\</span> 
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -507,6 +508,7 @@ should be added to the request method header. The sign is formed by receiving th
     <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">wallet</span><span class="o">&gt;</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your_email@example.com</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">https://some-where.com</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span> <span class="p">}</span> <span class="err">\</span> 
 </code></pre></div>
 <blockquote>
@@ -618,6 +620,174 @@ should be added to the request method header. The sign is formed by receiving th
 </tbody></table>
 
 <p>The structure of the negative response is identical to that described above.</p>
+
+<p>Description request type=&#39;token&#39;:</p>
+
+<blockquote>
+<p>Request type=&#39;token&#39; example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your partner id&gt;</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">200</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">pay_type</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">card</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;user email here&gt;</span><span class="dl">"</span> 
+    <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your wallet here&gt;</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">https://some-where.com</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">lang_code</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">en</span><span class="dl">"</span> <span class="p">}</span> <span class="o">\</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Your partner ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>amount</td>
+<td>float</td>
+<td>Request amount</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>pay_type</td>
+<td>string</td>
+<td>Optional parameter, values &quot;card&quot; or &quot;bank&quot;. The default is &quot;card&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>from</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>email</td>
+<td>string</td>
+<td>User email</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>wallet</td>
+<td>string</td>
+<td>User wallet</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>order_url</td>
+<td>string</td>
+<td>Link to the request page (optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>lang_code</td>
+<td>string</td>
+<td>Language code in ISO format  (en,ru,lv,ee)</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>The method returns a response also in json format. Description of the response for a successful outcome:</p>
+
+<blockquote>
+<p>Successfull response type=&#39;token&#39; example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span> 
+    <span class="err">“</span><span class="nx">request_url</span><span class="err">”</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your API URL&gt;/&lt;your partner ID&gt;/&lt;request ID&gt;/</span><span class="dl">"</span><span class="p">,</span>
+    <span class="err">“</span><span class="nx">result</span><span class="err">”</span><span class="p">:</span> <span class="err">“</span><span class="kc">true</span><span class="err">”</span> 
+<span class="p">}</span>
+</code></pre></div>
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts true if the request succeeds.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>request_url</td>
+<td>string</td>
+<td>Request URL</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>In case of a negative result, responce will be as follows:</p>
+
+<blockquote>
+<p>Negative response example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span><span class="mi">401</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Wrong input data</span><span class="dl">"</span><span class="p">,</span>
+ <span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts false if errors occurred during execution.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>error</td>
+<td>int</td>
+<td>Error Code (optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>message</td>
+<td>string</td>
+<td>Error message</td>
+<td></td>
+</tr>
+</tbody></table>
 <h2 id='method-getcalcdata'>Method getCalcData</h2>
 <blockquote>
 <p>Request getCalcData example</p>
