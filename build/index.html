@@ -587,10 +587,21 @@ should be added to the request method header. The sign is formed by receiving th
 <p>Successfull response type=&#39;exchange&#39; example</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span> 
-    <span class="err">“</span><span class="nx">request_url</span><span class="err">”</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your API URL&gt;/&lt;your ID&gt;/&lt;request ID&gt;/</span><span class="dl">"</span><span class="p">,</span>
-    <span class="err">“</span><span class="nx">result</span><span class="err">”</span><span class="p">:</span> <span class="err">“</span><span class="kc">true</span><span class="err">”</span> 
-<span class="p">}</span>
-</code></pre></div>
+    <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">exchange_data</span><span class="dl">"</span><span class="p">:{</span>   
+        <span class="dl">"</span><span class="s2">request_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">request</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">user_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">user</span><span class="dl">'</span><span class="s1">s ID&gt;,
+        "from":2,
+        "to":3,
+        "method":2,
+        "sum":200,
+        "wallet":&lt;your wallet&gt;,
+        "id":19
+    },
+    “request_url”: "&lt;your API URL&gt;/&lt;your ID&gt;/&lt;request ID&gt;/",
+}
+</span></code></pre></div>
 <blockquote>
 </blockquote>
 
@@ -612,6 +623,76 @@ should be added to the request method header. The sign is formed by receiving th
 </tr>
 <tr>
 <td>2</td>
+<td>exchange_data</td>
+<td>array</td>
+<td>array with exchange data</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>id</td>
+<td>int</td>
+<td>Transaction ID of your exchange in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>request_id</td>
+<td>string</td>
+<td>ID of your exchange request in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Your partner ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>user_id</td>
+<td>int</td>
+<td>Customer  ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>method</td>
+<td>int</td>
+<td>ID of the payment method in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>from</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>to</td>
+<td>int</td>
+<td>Cryptocurrency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>sum</td>
+<td>float</td>
+<td>Transaction Amount (in EUR or USD)</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>wallet</td>
+<td>string</td>
+<td>Wallet to send cryptocurrency</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
 <td>request_url</td>
 <td>string</td>
 <td>Request URL</td>
