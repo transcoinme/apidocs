@@ -161,8 +161,19 @@ The method returns a response also in json format. Description of the response f
  
 ```javascript
 { 
+	"result":true,
+	"exchange_data":{	
+		"request_id":<request ID>,
+		"partner_id":<your ID>,
+		"user_id":<user's ID>,
+		"from":2,
+		"to":3,
+		"method":2,
+		"sum":200,
+		"wallet":<your wallet>,
+		"id":19
+	},
 	“request_url”: "<your API URL>/<your ID>/<request ID>/",
-	“result”: “true” 
 }
 ```
 >
@@ -170,7 +181,17 @@ The method returns a response also in json format. Description of the response f
 | № | Parameter name | Type   | Description                                           |   |
 |---|----------------|--------|-------------------------------------------------------|---|
 | 1 | result         | bool   | Accepts true if the request succeeds.                 |   |
-| 2 | request_url    | string | Request URL                                           |   |
+| 2 | exchange_data  | array  | array with exchange data                              |   |
+| 3 | id             | int    | Transaction ID of your exchange in our system         |   |
+| 4 | request_id     | string | ID of your exchange request in our system             |   |
+| 5 | partner_id     | int    | Your partner ID in our system                         |   |
+| 6 | user_id        | int    | Customer  ID in our system                            |   |
+| 7 | method         | int    | ID of the payment method in our system                |   |
+| 8 | from           | int    | Currency identifier in our system                     |   |
+| 9 | to             | int    | Cryptocurrency identifier in our system               |   |
+|10 | sum            | float  | Transaction Amount (in EUR or USD)                    |   |
+|11 | wallet         | string | Wallet to send cryptocurrency                         |   |
+|12 | request_url    | string | Request URL                                           |   |
 
 The structure of the negative response is identical to that described above.
 
