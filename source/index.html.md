@@ -233,18 +233,176 @@ The method returns a response also in json format. Description of the response f
  
 ```javascript
 { 
-	“request_url”: "<your API URL>/<your partner ID>/<request ID>/",
 	“result”: “true” 
+	“request_url”: "<your API URL>/<your partner ID>/<request ID>/",
+	"token_data":{
+		"id":30,
+		"request_id":"Cfh9EiIa3T1icutc",
+		"partner_id":6943,
+		"user_id":"23752",
+		"created":"2020-08-05 14:01:46",
+		"tkn_name":"<name of token>",
+		"tkn_price":"<token price>",
+		"sum":100,
+		"method":2,
+		"tkn_sum":0,
+		"to":"2",
+		"from":"2",
+		"wallet":"your wallet here",
+		"status":0,
+		"order_url":"\/<request ID>\/"
+	}
 }
 ```
 
 | № | Parameter name | Type   | Description                                           |   |
 |---|----------------|--------|-------------------------------------------------------|---|
 | 1 | result         | bool   | Accepts true if the request succeeds.                 |   |
-| 2 | request_url    | string | Request URL                                           |   |
-
+| 2 | token_data     | array  | array with exchange data                              |   |
+| 3 | id             | int    | Transaction ID of your token exchange in our system   |   |
+| 4 | request_id     | string | ID of your exchange request in our system             |   |
+| 5 | partner_id     | int    | Your partner ID in our system                         |   |
+| 6 | user_id        | int    | Customer  ID in our system                            |   |
+| 7 | created        | date   | Date of creating token transaction                    |   |
+| 8 | tkn_name       | string | Name of your token                                    |   |
+| 9 | tkn_price      | float  | Token price                                           |   |
+|10 | sum            | float  | Transaction Amount (in EUR or USD)                    |   |
+|11 | method         | int    | ID of the payment method in our system                |   |
+|12 | tkn_sum        | float  | Number of tokens to be purchased                      |   |
+|13 | from           | int    | Currency identifier in our system                     |   |
+|14 | to             | int    | Currency identifier in our system                     |   |
+|15 | wallet         | string | Wallet to send cryptocurrency                         |   |
+|16 | status         | int    | ID of transaction status                              |   |
+|17 | order_url      | string | Order URL                                             |   |
 
 In case of a negative result, responce will be as follows:
+
+> Negative response example
+ 
+```javascript
+{"result":false,
+ "error":401,
+ "message":"Wrong input data",
+ }
+```
+
+>
+
+| № | Parameter name | Type   | Description                                           |   |
+|---|----------------|--------|-------------------------------------------------------|---|
+| 1 | result         | bool   | Accepts false if errors occurred during execution.    |   |
+| 2 | error          | int    | Error Code (optional)                                 |   |
+| 3 | message        | string | Error message                                         |   |
+
+
+## Method merchant 
+
+> Example of merchant method 
+ 
+```javascript
+curl 'https://api.transcoin.io/v1/merchant/' \
+  -H 'Content-Type: application/json' \
+  -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
+  --data {
+	"project_id" : <your project id>,
+	"transaction_id" : 63} \ 
+```
+>
+
+The method allows you to track the statuses of transactions. This method require 
+your project_id and transaction_id as input data and returns response a string in json format.
+
+| № | Parameter name | Type   | Description                                           |   |
+|---|----------------|--------|-------------------------------------------------------|---|
+| 1 | project_id     | int    | ID of your project in our system (required)           |   |
+| 2 | transaction_id | int    | ID of transaction to track status (required)          |   |
+
+> Response of merchant method example 
+
+```javascript
+{ 	
+	"result":true,
+	"data":{
+		"id":"63",
+		"status":"new"
+	}
+}
+```
+>
+
+| № | Parameter name | Type   | Description                                           |   |
+|---|----------------|--------|-------------------------------------------------------|---|
+| 1 | result         | bool   | Accepts true if the request succeeds.                 |   |
+| 2 | data           | array  | Array with response data. Such structure              |   |
+| 3 | id             | int    | ID of transaction                                     |   |
+| 4 | status         | string | Status. May be "new","pending","success","cancel"     |   |
+
+
+If the result is negative, the method will return a responce with the following structure:
+
+> Negative response example
+ 
+```javascript
+{"result":false,
+ "error":401,
+ "message":"Wrong input data",
+ }
+```
+
+>
+
+| № | Parameter name | Type   | Description                                           |   |
+|---|----------------|--------|-------------------------------------------------------|---|
+| 1 | result         | bool   | Accepts false if errors occurred during execution.    |   |
+| 2 | error          | int    | Error Code (optional)                                 |   |
+| 3 | message        | string | Error message                                         |   |
+
+
+## Method exchange 
+
+> Example of exchange method 
+ 
+```javascript
+curl 'https://api.transcoin.io/v1/exchange/' \
+  -H 'Content-Type: application/json' \
+  -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
+  --data {
+	"partner_id" : <your ID>,
+	"exchange_id" : 22565} \ 
+```
+>
+
+Almost completely similar to the merchant method except for the input data. Also allows you 
+to track the statuses of exchange transactions. This method require your partner_id and exchange_id 
+as input data and returns response a string in json format.
+
+| № | Parameter name | Type   | Description                                           |   |
+|---|----------------|--------|-------------------------------------------------------|---|
+| 1 | partner_id     | int    | Your ID in our system (required)                      |   |
+| 2 | transaction_id | int    | ID of exchange to track status (required)             |   |
+
+> Response of exchange method example 
+
+```javascript
+{ 	
+	"result":true,
+	"data":{
+		"id":"22553",
+		"status":"pending"
+	}
+}
+```
+>
+
+| № | Parameter name | Type   | Description                                           |   |
+|---|----------------|--------|-------------------------------------------------------|---|
+| 1 | result         | bool   | Accepts true if the request succeeds.                 |   |
+| 2 | data           | array  | Array with response data. Such structure              |   |
+| 3 | id             | int    | ID of exchange                                     |   |
+| 4 | status         | string | Status. May be "new","pending","success","cancel"     |   |
+
+
+If the result is negative, the method will return a responce with the following structure:
 
 > Negative response example
  
