@@ -228,6 +228,12 @@
                     <a href="#method-process" class="toc-h2 toc-link" data-title="Method process">Method process</a>
                   </li>
                   <li>
+                    <a href="#method-merchant" class="toc-h2 toc-link" data-title="Method merchant">Method merchant</a>
+                  </li>
+                  <li>
+                    <a href="#method-exchange" class="toc-h2 toc-link" data-title="Method exchange">Method exchange</a>
+                  </li>
+                  <li>
                     <a href="#method-getcalcdata" class="toc-h2 toc-link" data-title="Method getCalcData">Method getCalcData</a>
                   </li>
                   <li>
@@ -796,8 +802,25 @@ should be added to the request method header. The sign is formed by receiving th
 <p>Successfull response type=&#39;token&#39; example</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span> 
-    <span class="err">“</span><span class="nx">request_url</span><span class="err">”</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your API URL&gt;/&lt;your partner ID&gt;/&lt;request ID&gt;/</span><span class="dl">"</span><span class="p">,</span>
     <span class="err">“</span><span class="nx">result</span><span class="err">”</span><span class="p">:</span> <span class="err">“</span><span class="kc">true</span><span class="err">”</span> 
+    <span class="err">“</span><span class="nx">request_url</span><span class="err">”</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your API URL&gt;/&lt;your partner ID&gt;/&lt;request ID&gt;/</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">token_data</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">30</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">request_id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Cfh9EiIa3T1icutc</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="mi">6943</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">user_id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">23752</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">created</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2020-08-05 14:01:46</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">tkn_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">&lt;name of token&gt;</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">tkn_price</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">&lt;token price&gt;</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">tkn_sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your wallet here</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="se">\</span><span class="s2">/&lt;request ID&gt;</span><span class="se">\</span><span class="s2">/</span><span class="dl">"</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 <table><thead>
@@ -818,14 +841,398 @@ should be added to the request method header. The sign is formed by receiving th
 </tr>
 <tr>
 <td>2</td>
-<td>request_url</td>
+<td>token_data</td>
+<td>array</td>
+<td>array with exchange data</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>id</td>
+<td>int</td>
+<td>Transaction ID of your token exchange in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>request_id</td>
 <td>string</td>
-<td>Request URL</td>
+<td>ID of your exchange request in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Your partner ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>user_id</td>
+<td>int</td>
+<td>Customer  ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>created</td>
+<td>date</td>
+<td>Date of creating token transaction</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>tkn_name</td>
+<td>string</td>
+<td>Name of your token</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>tkn_price</td>
+<td>float</td>
+<td>Token price</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>sum</td>
+<td>float</td>
+<td>Transaction Amount (in EUR or USD)</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>method</td>
+<td>int</td>
+<td>ID of the payment method in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>tkn_sum</td>
+<td>float</td>
+<td>Number of tokens to be purchased</td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
+<td>from</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>14</td>
+<td>to</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>15</td>
+<td>wallet</td>
+<td>string</td>
+<td>Wallet to send cryptocurrency</td>
+<td></td>
+</tr>
+<tr>
+<td>16</td>
+<td>status</td>
+<td>int</td>
+<td>ID of transaction status</td>
+<td></td>
+</tr>
+<tr>
+<td>17</td>
+<td>order_url</td>
+<td>string</td>
+<td>Order URL</td>
 <td></td>
 </tr>
 </tbody></table>
 
 <p>In case of a negative result, responce will be as follows:</p>
+
+<blockquote>
+<p>Negative response example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span><span class="mi">401</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Wrong input data</span><span class="dl">"</span><span class="p">,</span>
+ <span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts false if errors occurred during execution.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>error</td>
+<td>int</td>
+<td>Error Code (optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>message</td>
+<td>string</td>
+<td>Error message</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id='method-merchant'>Method merchant</h2>
+<blockquote>
+<p>Example of merchant method </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/merchant/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">project_id</span><span class="dl">"</span> <span class="p">:</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">project</span> <span class="nx">id</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">transaction_id</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">63</span><span class="p">}</span> <span class="err">\</span> 
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<p>The method allows you to track the statuses of transactions. This method require 
+your project_id and transaction_id as input data and returns response a string in json format.</p>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>project_id</td>
+<td>int</td>
+<td>ID of your project in our system (required)</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>transaction_id</td>
+<td>int</td>
+<td>ID of transaction to track status (required)</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>Response of merchant method example </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>   
+    <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">63</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">new</span><span class="dl">"</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts true if the request succeeds.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>data</td>
+<td>array</td>
+<td>Array with response data. Such structure</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>id</td>
+<td>int</td>
+<td>ID of transaction</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>status</td>
+<td>string</td>
+<td>Status. May be &quot;new&quot;,&quot;pending&quot;,&quot;success&quot;,&quot;cancel&quot;</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>If the result is negative, the method will return a responce with the following structure:</p>
+
+<blockquote>
+<p>Negative response example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span><span class="mi">401</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Wrong input data</span><span class="dl">"</span><span class="p">,</span>
+ <span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts false if errors occurred during execution.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>error</td>
+<td>int</td>
+<td>Error Code (optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>message</td>
+<td>string</td>
+<td>Error message</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id='method-exchange'>Method exchange</h2>
+<blockquote>
+<p>Example of exchange method </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/exchange/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span> <span class="p">:</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">exchange_id</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">22565</span><span class="p">}</span> <span class="err">\</span> 
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<p>Almost completely similar to the merchant method except for the input data. Also allows you 
+to track the statuses of exchange transactions. This method require your partner_id and exchange_id 
+as input data and returns response a string in json format.</p>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Your ID in our system (required)</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>transaction_id</td>
+<td>int</td>
+<td>ID of exchange to track status (required)</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>Response of exchange method example </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>   
+    <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">22553</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">pending</span><span class="dl">"</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts true if the request succeeds.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>data</td>
+<td>array</td>
+<td>Array with response data. Such structure</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>id</td>
+<td>int</td>
+<td>ID of exchange</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>status</td>
+<td>string</td>
+<td>Status. May be &quot;new&quot;,&quot;pending&quot;,&quot;success&quot;,&quot;cancel&quot;</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>If the result is negative, the method will return a responce with the following structure:</p>
 
 <blockquote>
 <p>Negative response example</p>
