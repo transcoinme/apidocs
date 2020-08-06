@@ -154,6 +154,7 @@ curl 'https://api.transcoin.io/v1/process/' \
 | 6 | to             | int    | Cryptocurrency identifier in our system               |   |
 | 7 | amount         | float  | Transaction Amount (in EUR or USD)                    |   |
 | 8 | order_url      | string | Link to the request page (optional)                   |   |
+| 9 | test           | bool   | Sign of a test order. If true, the order is test.     |   |
 
 The method returns a response also in json format. Description of the response for a successful outcome:
 
@@ -174,6 +175,7 @@ The method returns a response also in json format. Description of the response f
 		"id":19
 	},
 	“request_url”: "<your API URL>/<your ID>/<request ID>/",
+	"test":true
 }
 ```
 >
@@ -250,7 +252,8 @@ The method returns a response also in json format. Description of the response f
 		"from":"2",
 		"wallet":"your wallet here",
 		"status":0,
-		"order_url":"\/<request ID>\/"
+		"order_url":"\/<request ID>\/",
+		"test":true
 	}
 }
 ```
@@ -274,6 +277,7 @@ The method returns a response also in json format. Description of the response f
 |15 | wallet         | string | Wallet to send cryptocurrency                         |   |
 |16 | status         | int    | ID of transaction status                              |   |
 |17 | order_url      | string | Order URL                                             |   |
+|18 | test           | bool   | Sign of a test order. If true, the order is test.     |   |
 
 In case of a negative result, responce will be as follows:
 
@@ -325,7 +329,8 @@ your project_id and transaction_id as input data and returns response a string i
 	"data":{
 		"id":"63",
 		"status":"new"
-	}
+	},
+	"test":true
 }
 ```
 >
@@ -336,6 +341,7 @@ your project_id and transaction_id as input data and returns response a string i
 | 2 | data           | array  | Array with response data. Such structure              |   |
 | 3 | id             | int    | ID of transaction                                     |   |
 | 4 | status         | string | Status. May be "new","pending","success","cancel"     |   |
+| 5 | test           | bool   | Sign of a test order. If true, the order is test.     |   |
 
 
 If the result is negative, the method will return a responce with the following structure:
@@ -389,7 +395,8 @@ as input data and returns response a string in json format.
 	"data":{
 		"id":"22553",
 		"status":"pending"
-	}
+	},
+	"test":true
 }
 ```
 >
@@ -398,8 +405,9 @@ as input data and returns response a string in json format.
 |---|----------------|--------|-------------------------------------------------------|---|
 | 1 | result         | bool   | Accepts true if the request succeeds.                 |   |
 | 2 | data           | array  | Array with response data. Such structure              |   |
-| 3 | id             | int    | ID of exchange                                     |   |
+| 3 | id             | int    | ID of exchange                                        |   |
 | 4 | status         | string | Status. May be "new","pending","success","cancel"     |   |
+| 5 | test           | bool   | Sign of a test order. If true, the order is test.     |   |
 
 
 If the result is negative, the method will return a responce with the following structure:
