@@ -585,6 +585,13 @@ should be added to the request method header. The sign is formed by receiving th
 <td>Link to the request page (optional)</td>
 <td></td>
 </tr>
+<tr>
+<td>9</td>
+<td>test</td>
+<td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
+<td></td>
+</tr>
 </tbody></table>
 
 <p>The method returns a response also in json format. Description of the response for a successful outcome:</p>
@@ -606,6 +613,7 @@ should be added to the request method header. The sign is formed by receiving th
         "id":19
     },
     “request_url”: "&lt;your API URL&gt;/&lt;your ID&gt;/&lt;request ID&gt;/",
+    "test":true
 }
 </span></code></pre></div>
 <blockquote>
@@ -819,7 +827,8 @@ should be added to the request method header. The sign is formed by receiving th
         <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your wallet here</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="se">\</span><span class="s2">/&lt;request ID&gt;</span><span class="se">\</span><span class="s2">/</span><span class="dl">"</span>
+        <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="se">\</span><span class="s2">/&lt;request ID&gt;</span><span class="se">\</span><span class="s2">/</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -951,6 +960,13 @@ should be added to the request method header. The sign is formed by receiving th
 <td>Order URL</td>
 <td></td>
 </tr>
+<tr>
+<td>18</td>
+<td>test</td>
+<td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
+<td></td>
+</tr>
 </tbody></table>
 
 <p>In case of a negative result, responce will be as follows:</p>
@@ -1047,7 +1063,8 @@ your project_id and transaction_id as input data and returns response a string i
     <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
         <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">63</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">new</span><span class="dl">"</span>
-    <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span>
 <span class="p">}</span>
 </code></pre></div>
 <blockquote>
@@ -1088,6 +1105,13 @@ your project_id and transaction_id as input data and returns response a string i
 <td>status</td>
 <td>string</td>
 <td>Status. May be &quot;new&quot;,&quot;pending&quot;,&quot;success&quot;,&quot;cancel&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>test</td>
+<td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
 <td></td>
 </tr>
 </tbody></table>
@@ -1187,7 +1211,8 @@ as input data and returns response a string in json format.</p>
     <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
         <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">22553</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">pending</span><span class="dl">"</span>
-    <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span>
 <span class="p">}</span>
 </code></pre></div>
 <blockquote>
@@ -1228,6 +1253,13 @@ as input data and returns response a string in json format.</p>
 <td>status</td>
 <td>string</td>
 <td>Status. May be &quot;new&quot;,&quot;pending&quot;,&quot;success&quot;,&quot;cancel&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>test</td>
+<td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
 <td></td>
 </tr>
 </tbody></table>
