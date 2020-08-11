@@ -538,7 +538,10 @@ should be added to the request method header. The sign is formed by receiving th
     <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">wallet</span><span class="o">&gt;</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your_email@example.com</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">https://some-where.com</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;order_url_in_your_store&gt;</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span> <span class="p">}</span> <span class="err">\</span> 
 </code></pre></div>
 <blockquote>
@@ -611,6 +614,27 @@ should be added to the request method header. The sign is formed by receiving th
 </tr>
 <tr>
 <td>9</td>
+<td>autoredirect</td>
+<td>int</td>
+<td>Can take values 0 or 1. Enables automatic redirect</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>success_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in success status</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>fail_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in fail status</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
 <td>test</td>
 <td>bool</td>
 <td>Sign of a test order. If true, the order is test.</td>
@@ -756,6 +780,9 @@ should be added to the request method header. The sign is formed by receiving th
     <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;user email here&gt;</span><span class="dl">"</span> 
     <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your wallet here&gt;</span><span class="dl">"</span><span class="p">,</span> 
     <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">https://some-where.com</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">lang_code</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">en</span><span class="dl">"</span> <span class="p">}</span> <span class="o">\</span>
 </code></pre></div>
 <blockquote>
@@ -820,10 +847,31 @@ should be added to the request method header. The sign is formed by receiving th
 <td></td>
 </tr>
 <tr>
-<td>7</td>
+<td>8</td>
 <td>lang_code</td>
 <td>string</td>
 <td>Language code in ISO format  (en,ru,lv,ee)</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>autoredirect</td>
+<td>int</td>
+<td>Can take values 0 or 1. Enables automatic redirect</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>success_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in success status</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>fail_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in fail status</td>
 <td></td>
 </tr>
 </tbody></table>
