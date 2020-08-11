@@ -58,6 +58,9 @@ curl 'https://api.transcoin.io/v1/process/' \
     "crypto_currency" : "BTC",
     "order_number" : 24,
     "description" : "Order Payment #24",
+	'autoredirect'   => 1,
+    'success_url'   => '<transaction_success_url>',
+    'fail_url'   	=> '<transaction_fail_url>',
     "date" : "01-06-2020 20:39:32"} \ 
 ```
 >
@@ -70,7 +73,10 @@ curl 'https://api.transcoin.io/v1/process/' \
 | 4 | crypto_currency | string | Short name for cryptocurrency                                         |   |
 | 5 | order_number    | int    | The order number in your store (must be unique for a specific project)|   |
 | 6 | description     | string |Payment Description                                                    |   |
-| 7 | date            | string | Order date in date format ('d-m-Y H: i: s')                           |   |
+| 7 | autoredirect    | int    | Can take values 0 or 1. Enables automatic redirect                    |   |
+| 8 | success_url     | string | URL redirect address for transactions in success status               |   |
+| 9 | fail_url        | string | URL redirect address for transactions in fail status                  |   |
+| 10| date            | string | Order date in date format ('d-m-Y H: i: s')                           |   |
 
 The method returns a response also in json format. Description of the response for a successful outcome:
 
