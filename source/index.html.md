@@ -72,7 +72,7 @@ curl 'https://api.transcoin.io/v1/process/' \
 | 3 | currency        | string | Currency abbreviation                                                 |   |
 | 4 | crypto_currency | string | Short name for cryptocurrency                                         |   |
 | 5 | order_number    | int    | The order number in your store (must be unique for a specific project)|   |
-| 6 | description     | string |Payment Description                                                    |   |
+| 6 | description     | string | Payment Description                                                   |   |
 | 7 | autoredirect    | int    | Can take values 0 or 1. Enables automatic redirect                    |   |
 | 8 | success_url     | string | URL redirect address for transactions in success status               |   |
 | 9 | fail_url        | string | URL redirect address for transactions in fail status                  |   |
@@ -145,22 +145,28 @@ curl 'https://api.transcoin.io/v1/process/' \
 	"to":"3",
 	"wallet":<your wallet>,
 	"email":"your_email@example.com",
-	"order_url": "https://some-where.com",
+	"order_url": "<order_url_in_your_store>",
+	"autoredirect": 1,
+    "success_url": '<transaction_success_url>',
+    "fail_url": '<transaction_fail_url>',
 	"partner_id":<your ID> } \ 
 ```
 >
 
-| № | Parameter name | Type   | Description                                           |   |
-|---|----------------|--------|-------------------------------------------------------|---|
-| 1 | partner_id     | int    | Partner ID in our system (required)                   |   |
-| 2 | wallet         | string | Wallet to send cryptocurrency                         |   |
-| 3 | email          | string | Customer Email                                        |   |
-| 4 | method         | int    | ID of the payment method in our system                |   |
-| 5 | from           | int    | Currency identifier in our system                     |   |
-| 6 | to             | int    | Cryptocurrency identifier in our system               |   |
-| 7 | amount         | float  | Transaction Amount (in EUR or USD)                    |   |
-| 8 | order_url      | string | Link to the request page (optional)                   |   |
-| 9 | test           | bool   | Sign of a test order. If true, the order is test.     |   |
+| № | Parameter name | Type   | Description                                             |   |
+|---|----------------|--------|---------------------------------------------------------|---|
+| 1 | partner_id     | int    | Partner ID in our system (required)                     |   |
+| 2 | wallet         | string | Wallet to send cryptocurrency                           |   |
+| 3 | email          | string | Customer Email                                          |   |
+| 4 | method         | int    | ID of the payment method in our system                  |   |
+| 5 | from           | int    | Currency identifier in our system                       |   |
+| 6 | to             | int    | Cryptocurrency identifier in our system                 |   |
+| 7 | amount         | float  | Transaction Amount (in EUR or USD)                      |   |
+| 8 | order_url      | string | Link to the request page (optional)                     |   |
+| 9 | autoredirect   | int    | Can take values 0 or 1. Enables automatic redirect      |   |
+| 10| success_url    | string | URL redirect address for transactions in success status |   |
+| 11| fail_url       | string | URL redirect address for transactions in fail status    |   |
+| 12| test           | bool   | Sign of a test order. If true, the order is test.       |   |
 
 The method returns a response also in json format. Description of the response for a successful outcome:
 
@@ -219,6 +225,9 @@ curl 'https://api.transcoin.io/v1/process/' \
 	"email" : "<user email here>" 
     "wallet" : "<your wallet here>", 
     "order_url"	: "https://some-where.com",
+	"autoredirect": 1,
+    "success_url": '<transaction_success_url>',
+    "fail_url": '<transaction_fail_url>',
 	"lang_code" : "en" } \
 ```
 >
@@ -232,7 +241,10 @@ curl 'https://api.transcoin.io/v1/process/' \
 | 5 | email           | string | User email															   |   |
 | 6 | wallet          | string | User wallet                                                           |   |
 | 7 | order_url       | string | Link to the request page (optional)                                   |   |
-| 7 | lang_code       | string | Language code in ISO format  (en,ru,lv,ee)                            |   |
+| 8 | lang_code       | string | Language code in ISO format  (en,ru,lv,ee)                            |   |
+| 9 | autoredirect    | int    | Can take values 0 or 1. Enables automatic redirect                    |   |
+| 10| success_url     | string | URL redirect address for transactions in success status               |   |
+| 11| fail_url        | string | URL redirect address for transactions in fail status                  |   |
 
 
 The method returns a response also in json format. Description of the response for a successful outcome:
