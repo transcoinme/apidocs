@@ -58,9 +58,9 @@ curl 'https://api.transcoin.io/v1/process/' \
     "crypto_currency" : "BTC",
     "order_number" : 24,
     "description" : "Order Payment #24",
-	'autoredirect'   => 1,
-    'success_url'   => '<transaction_success_url>',
-    'fail_url'   	=> '<transaction_fail_url>',
+	"autoredirect"   => 1,
+    "success_url"   => '<transaction_success_url>',
+    "fail_url"   	=> '<transaction_fail_url>',
     "date" : "01-06-2020 20:39:32"} \ 
 ```
 >
