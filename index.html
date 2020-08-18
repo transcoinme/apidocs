@@ -209,7 +209,7 @@
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo-d1dd9617.png" class="logo" alt="" />
+      <img src="images/logo-8a9c052f.png" class="logo" alt="" />
         <div class="lang-selector">
               <a href="#" data-language-name="curl examples">curl examples</a>
         </div>
@@ -228,6 +228,12 @@
                     <a href="#method-process" class="toc-h2 toc-link" data-title="Method process">Method process</a>
                   </li>
                   <li>
+                    <a href="#method-merchant" class="toc-h2 toc-link" data-title="Method merchant">Method merchant</a>
+                  </li>
+                  <li>
+                    <a href="#method-exchange" class="toc-h2 toc-link" data-title="Method exchange">Method exchange</a>
+                  </li>
+                  <li>
                     <a href="#method-getcalcdata" class="toc-h2 toc-link" data-title="Method getCalcData">Method getCalcData</a>
                   </li>
                   <li>
@@ -237,7 +243,7 @@
           </li>
       </ul>
         <ul class="toc-footer">
-            <li><a href='#'>Sign Up for a Developer Key</a></li>
+            <li><a href='https://merch.transcoin.me'>Sign Up for a Developer Key</a></li>
             <li><a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a></li>
         </ul>
     </div>
@@ -266,8 +272,9 @@ should be added to the request method header. The sign is formed by receiving th
 <p>The type of operation must be specified in request parameter <code>type</code>. The <code>type</code> parameter can take such values: <code>merchant</code>, <code>exchange</code>.</p>
 
 <ul>
-<li><code>merchant</code> - creating a request for payment with cryptocurrency; </li>
+<li><code>merchant</code> - creating request for payment with cryptocurrency; </li>
 <li><code>exchange</code> - creating cryptocurrency purchase request;</li>
+<li><code>token</code>    - creating request for the purchase of tokens (game currencies);</li>
 </ul>
 
 <p>The remaining request parameters depend on the type of transaction you are creating.</p>
@@ -277,18 +284,21 @@ should be added to the request method header. The sign is formed by receiving th
 <blockquote>
 <p>Example of process request type = &#39;merchant&#39; </p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">http://merchant.transcoin.me/api/process/</span><span class="dl">'</span> <span class="o">\</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
-    <span class="dl">'</span><span class="s1">type</span><span class="dl">'</span>          <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">merchant</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">project_id</span><span class="dl">'</span>    <span class="o">=&gt;</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">project</span> <span class="nx">id</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">amount</span><span class="dl">'</span>        <span class="o">=&gt;</span> <span class="mi">200</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">currency</span><span class="dl">'</span>      <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">EUR</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">crypto_currency</span><span class="dl">'</span> <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">BTC</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">order_number</span><span class="dl">'</span>  <span class="o">=&gt;</span> <span class="mi">24</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">description</span><span class="dl">'</span>   <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">Order Payment #24</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">'</span><span class="s1">date</span><span class="dl">'</span>          <span class="o">=&gt;</span> <span class="dl">'</span><span class="s1">01-06-2020 20:39:32</span><span class="dl">'</span><span class="p">}</span> <span class="err">\</span> 
+    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">merchant</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">project_id</span><span class="dl">"</span> <span class="p">:</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">project</span> <span class="nx">id</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">currency</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">crypto_currency</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">order_number</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">24</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">description</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">Order Payment #24</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">date</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">01-06-2020 20:39:32</span><span class="dl">"</span><span class="p">}</span> <span class="err">\</span> 
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -346,6 +356,27 @@ should be added to the request method header. The sign is formed by receiving th
 </tr>
 <tr>
 <td>7</td>
+<td>autoredirect</td>
+<td>int</td>
+<td>Can take values 0 or 1. Enables automatic redirect</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>success_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in success status</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>fail_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in fail status</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
 <td>date</td>
 <td>string</td>
 <td>Order date in date format (&#39;d-m-Y H: i: s&#39;)</td>
@@ -360,12 +391,12 @@ should be added to the request method header. The sign is formed by receiving th
 </blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
  <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">37</span><span class="p">,</span>
- <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">mtfmJivZSoEQ1ZGUhVs2m3TCK3GR1aw9Gj</span><span class="dl">"</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">wallet</span><span class="o">&gt;</span><span class="p">,</span>
  <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.02989888722560715</span><span class="p">,</span>
  <span class="dl">"</span><span class="s2">currency</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
  <span class="dl">"</span><span class="s2">fee</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.0014949443612803576</span><span class="p">,</span>
- <span class="dl">"</span><span class="s2">qrcode_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">https:</span><span class="se">\</span><span class="s2">/</span><span class="se">\</span><span class="s2">/www.coinpayments.net</span><span class="se">\</span><span class="s2">/qrgen.php?id=CPEF1DUBVO5MWNBN8YLO1AVFW6&amp;key=18ad9309f461ad51d628d44177abc2ff</span><span class="dl">"</span><span class="p">,</span>
- <span class="dl">"</span><span class="s2">checkout_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">https:</span><span class="se">\</span><span class="s2">/</span><span class="se">\</span><span class="s2">/www.coinpayments.net</span><span class="se">\</span><span class="s2">/index.php?cmd=checkout&amp;id=CPEF1DUBVO5MWNBN8YLO1AVFW6&amp;key=18ad9309f461ad51d628d44177abc2ff</span><span class="dl">"</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">qrcode_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;YOUR_API_URL&gt;</span><span class="dl">"</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">checkout_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">&lt;YOUR_API_URL&gt;</span><span class="dl">"</span><span class="p">,</span>
  <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span>
  <span class="p">}</span>
 </code></pre></div>
@@ -496,7 +527,7 @@ should be added to the request method header. The sign is formed by receiving th
 <blockquote>
 <p>Request type=&#39;exchange&#39; example</p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">http://merchant.transcoin.me/api/process/</span><span class="dl">'</span> <span class="o">\</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
@@ -505,9 +536,13 @@ should be added to the request method header. The sign is formed by receiving th
     <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">15DQ4VCLvidYRsPjVKwxgntFrta16Kgikv</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">wallet</span><span class="o">&gt;</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your_email@example.com</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10050</span><span class="dl">"</span> <span class="p">}</span> <span class="err">\</span> 
+    <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;order_url_in_your_store&gt;</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span> <span class="p">}</span> <span class="err">\</span> 
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -577,6 +612,34 @@ should be added to the request method header. The sign is formed by receiving th
 <td>Link to the request page (optional)</td>
 <td></td>
 </tr>
+<tr>
+<td>9</td>
+<td>autoredirect</td>
+<td>int</td>
+<td>Can take values 0 or 1. Enables automatic redirect</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>success_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in success status</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>fail_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in fail status</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>test</td>
+<td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
+<td></td>
+</tr>
 </tbody></table>
 
 <p>The method returns a response also in json format. Description of the response for a successful outcome:</p>
@@ -585,8 +648,495 @@ should be added to the request method header. The sign is formed by receiving th
 <p>Successfull response type=&#39;exchange&#39; example</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span> 
-    <span class="err">“</span><span class="nx">request_url</span><span class="err">”</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://merchant.transcoin.me/ru/transactions/exchange/10050/TdlBamvbRqMHjgJh/</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">exchange_data</span><span class="dl">"</span><span class="p">:{</span>   
+        <span class="dl">"</span><span class="s2">request_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">request</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">user_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">user</span><span class="dl">'</span><span class="s1">s ID&gt;,
+        "from":2,
+        "to":3,
+        "method":2,
+        "sum":200,
+        "wallet":&lt;your wallet&gt;,
+        "id":19
+    },
+    “request_url”: "&lt;your API URL&gt;/&lt;your ID&gt;/&lt;request ID&gt;/",
+    "test":true
+}
+</span></code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts true if the request succeeds.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>exchange_data</td>
+<td>array</td>
+<td>array with exchange data</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>id</td>
+<td>int</td>
+<td>Transaction ID of your exchange in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>request_id</td>
+<td>string</td>
+<td>ID of your exchange request in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Your partner ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>user_id</td>
+<td>int</td>
+<td>Customer  ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>method</td>
+<td>int</td>
+<td>ID of the payment method in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>from</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>to</td>
+<td>int</td>
+<td>Cryptocurrency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>sum</td>
+<td>float</td>
+<td>Transaction Amount (in EUR or USD)</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>wallet</td>
+<td>string</td>
+<td>Wallet to send cryptocurrency</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>request_url</td>
+<td>string</td>
+<td>Request URL</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>The structure of the negative response is identical to that described above.</p>
+
+<p>Description request type=&#39;token&#39;:</p>
+
+<blockquote>
+<p>Request type=&#39;token&#39; example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your partner id&gt;</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">200</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">pay_type</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">card</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;user email here&gt;</span><span class="dl">"</span> 
+    <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your wallet here&gt;</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">https://some-where.com</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">lang_code</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">en</span><span class="dl">"</span> <span class="p">}</span> <span class="o">\</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Your partner ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>amount</td>
+<td>float</td>
+<td>Request amount</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>pay_type</td>
+<td>string</td>
+<td>Optional parameter, values &quot;card&quot; or &quot;bank&quot;. The default is &quot;card&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>from</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>email</td>
+<td>string</td>
+<td>User email</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>wallet</td>
+<td>string</td>
+<td>User wallet</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>order_url</td>
+<td>string</td>
+<td>Link to the request page (optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>lang_code</td>
+<td>string</td>
+<td>Language code in ISO format  (en,ru,lv,ee)</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>autoredirect</td>
+<td>int</td>
+<td>Can take values 0 or 1. Enables automatic redirect</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>success_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in success status</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>fail_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in fail status</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>The method returns a response also in json format. Description of the response for a successful outcome:</p>
+
+<blockquote>
+<p>Successfull response type=&#39;token&#39; example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span> 
     <span class="err">“</span><span class="nx">result</span><span class="err">”</span><span class="p">:</span> <span class="err">“</span><span class="kc">true</span><span class="err">”</span> 
+    <span class="err">“</span><span class="nx">request_url</span><span class="err">”</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your API URL&gt;/&lt;your partner ID&gt;/&lt;request ID&gt;/</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">token_data</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">30</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">request_id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Cfh9EiIa3T1icutc</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="mi">6943</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">user_id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">23752</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">created</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2020-08-05 14:01:46</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">tkn_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">&lt;name of token&gt;</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">tkn_price</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">&lt;token price&gt;</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">tkn_sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your wallet here</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="se">\</span><span class="s2">/&lt;request ID&gt;</span><span class="se">\</span><span class="s2">/</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts true if the request succeeds.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>token_data</td>
+<td>array</td>
+<td>array with exchange data</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>id</td>
+<td>int</td>
+<td>Transaction ID of your token exchange in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>request_id</td>
+<td>string</td>
+<td>ID of your exchange request in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Your partner ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>user_id</td>
+<td>int</td>
+<td>Customer  ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>created</td>
+<td>date</td>
+<td>Date of creating token transaction</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>tkn_name</td>
+<td>string</td>
+<td>Name of your token</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>tkn_price</td>
+<td>float</td>
+<td>Token price</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>sum</td>
+<td>float</td>
+<td>Transaction Amount (in EUR or USD)</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>method</td>
+<td>int</td>
+<td>ID of the payment method in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>tkn_sum</td>
+<td>float</td>
+<td>Number of tokens to be purchased</td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
+<td>from</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>14</td>
+<td>to</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>15</td>
+<td>wallet</td>
+<td>string</td>
+<td>Wallet to send cryptocurrency</td>
+<td></td>
+</tr>
+<tr>
+<td>16</td>
+<td>status</td>
+<td>int</td>
+<td>ID of transaction status</td>
+<td></td>
+</tr>
+<tr>
+<td>17</td>
+<td>order_url</td>
+<td>string</td>
+<td>Order URL</td>
+<td></td>
+</tr>
+<tr>
+<td>18</td>
+<td>test</td>
+<td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>In case of a negative result, responce will be as follows:</p>
+
+<blockquote>
+<p>Negative response example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span><span class="mi">401</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Wrong input data</span><span class="dl">"</span><span class="p">,</span>
+ <span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts false if errors occurred during execution.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>error</td>
+<td>int</td>
+<td>Error Code (optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>message</td>
+<td>string</td>
+<td>Error message</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id='method-merchant'>Method merchant</h2>
+<blockquote>
+<p>Example of merchant method </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/merchant/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">project_id</span><span class="dl">"</span> <span class="p">:</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">project</span> <span class="nx">id</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">transaction_id</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">63</span><span class="p">}</span> <span class="err">\</span> 
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<p>The method allows you to track the statuses of transactions. This method require 
+your project_id and transaction_id as input data and returns response a string in json format.</p>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>project_id</td>
+<td>int</td>
+<td>ID of your project in our system (required)</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>transaction_id</td>
+<td>int</td>
+<td>ID of transaction to track status (required)</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>Response of merchant method example </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>   
+    <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">63</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">new</span><span class="dl">"</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span>
 <span class="p">}</span>
 </code></pre></div>
 <blockquote>
@@ -610,66 +1160,294 @@ should be added to the request method header. The sign is formed by receiving th
 </tr>
 <tr>
 <td>2</td>
-<td>request_url</td>
+<td>data</td>
+<td>array</td>
+<td>Array with response data. Such structure</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>id</td>
+<td>int</td>
+<td>ID of transaction</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>status</td>
 <td>string</td>
-<td>Request URL</td>
+<td>Status. May be &quot;new&quot;,&quot;pending&quot;,&quot;success&quot;,&quot;cancel&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>test</td>
+<td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
 <td></td>
 </tr>
 </tbody></table>
 
-<p>The structure of the negative response is identical to that described above.</p>
+<p>If the result is negative, the method will return a responce with the following structure:</p>
+
+<blockquote>
+<p>Negative response example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span><span class="mi">401</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Wrong input data</span><span class="dl">"</span><span class="p">,</span>
+ <span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts false if errors occurred during execution.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>error</td>
+<td>int</td>
+<td>Error Code (optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>message</td>
+<td>string</td>
+<td>Error message</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id='method-exchange'>Method exchange</h2>
+<blockquote>
+<p>Example of exchange method </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/exchange/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span> <span class="p">:</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">exchange_id</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">22565</span><span class="p">}</span> <span class="err">\</span> 
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<p>Almost completely similar to the merchant method except for the input data. Also allows you 
+to track the statuses of exchange transactions. This method require your partner_id and exchange_id 
+as input data and returns response a string in json format.</p>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Your ID in our system (required)</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>transaction_id</td>
+<td>int</td>
+<td>ID of exchange to track status (required)</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>Response of exchange method example </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>   
+    <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">22553</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">pending</span><span class="dl">"</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span>
+<span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts true if the request succeeds.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>data</td>
+<td>array</td>
+<td>Array with response data. Such structure</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>id</td>
+<td>int</td>
+<td>ID of exchange</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>status</td>
+<td>string</td>
+<td>Status. May be &quot;new&quot;,&quot;pending&quot;,&quot;success&quot;,&quot;cancel&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>test</td>
+<td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>If the result is negative, the method will return a responce with the following structure:</p>
+
+<blockquote>
+<p>Negative response example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span><span class="mi">401</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Wrong input data</span><span class="dl">"</span><span class="p">,</span>
+ <span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts false if errors occurred during execution.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>error</td>
+<td>int</td>
+<td>Error Code (optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>message</td>
+<td>string</td>
+<td>Error message</td>
+<td></td>
+</tr>
+</tbody></table>
 <h2 id='method-getcalcdata'>Method getCalcData</h2>
 <blockquote>
 <p>Request getCalcData example</p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">http://merchant.transcoin.me/api/process/getCalcData</span><span class="dl">'</span> <span class="o">\</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/getCalcData</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span> <span class="p">}</span> <span class="err">\</span> 
 
 </code></pre></div>
 <blockquote>
 </blockquote>
 
 <p>Method provides data for the preliminary calculation of the transaction (payment amounts and commissions).
-This method does not require input data and returns response a string in json format.</p>
+This method require your partner_id as input data and returns response a string in json format.</p>
 
 <p>Method response returns a fairly large array of data:</p>
 
 <blockquote>
 <p>Responce getCalcData example </p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
-<span class="dl">"</span><span class="s2">current_step</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">start_page</span><span class="dl">"</span><span class="p">,</span>
-<span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">""</span>
-<span class="p">,</span><span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
-    <span class="dl">"</span><span class="s2">buy_payment_methods</span><span class="dl">"</span><span class="p">:[{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank Card</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.55</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span> <span class="p">,</span><span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">lim</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">enable_mes</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">25000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50000</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10</span><span class="dl">"</span><span class="p">},</span> 
-        <span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">21</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Skrill</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1.76</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.5</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">lim</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3000</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">enable_mes</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">20000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10</span><span class="dl">"</span><span class="p">},</span> 
-        <span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">12</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank transfer (SEPA)</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2.95</span><span class="dl">"</span> <span class="p">,</span><span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">60000</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">enable_mes</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">60000</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">20</span><span class="dl">"</span><span class="p">},</span> 
-        <span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">24</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Netteler</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.52</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">lim</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10000</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">enable_mes</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10</span><span class="dl">"</span><span class="p">},</span> 
-        <span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">11</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Advcash</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">4.95</span><span class="dl">"</span><span class="p">,,</span><span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">lim</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">enable_mes</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">20000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10</span><span class="dl">"</span><span class="p">}],</span>
-    <span class="dl">"</span><span class="s2">sell_payment_methods</span><span class="dl">"</span><span class="p">:[{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">23</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank Card</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2.5</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1.25</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">lim</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2500</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">enable_mes</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">4800</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">20000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">5</span><span class="dl">"</span><span class="p">},</span> 
-        <span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank transfer(SEPA)</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span> <span class="p">,</span> <span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">20000</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">enable_mes</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">30000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">80000</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">40</span><span class="dl">"</span><span class="p">},</span> 
-        <span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">25</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Skrill</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1.86</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10000</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">enable_mes</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">20000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50000</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10</span><span class="dl">"</span><span class="p">},</span> 
-        <span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">28</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Netteler</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.85</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">lim</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">8000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">enable_mes</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">8000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">25000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">15</span><span class="dl">"</span><span class="p">},</span> 
-        <span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Advcash</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1.95</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">lim</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">enable_mes</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50000</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10</span><span class="dl">"</span><span class="p">}],</span> 
-    <span class="dl">"</span><span class="s2">valuts</span><span class="dl">"</span><span class="p">:[{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">USD</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">number_format</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">},</span> 
-        <span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">number_format</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span> <span class="p">,</span><span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100000</span><span class="dl">"</span><span class="p">}],</span> 
-    <span class="dl">"</span><span class="s2">crypto_valuts</span><span class="dl">"</span><span class="p">:[{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.001</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">number_format</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">5</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">74.810473486663</span><span class="dl">"</span><span class="p">},</span>
-        <span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">4</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">ETH</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.006</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">number_format</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">4</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">184.32042249058</span><span class="dl">"</span><span class="p">},</span> 
-        <span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">5</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">LTC</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.002</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">number_format</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">4</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1198.9792968198</span><span class="dl">"</span><span class="p">},</span> 
-        <span class="p">{</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">6</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">XRP</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.03</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">number_format</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">5</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">209654.50353143</span><span class="dl">"</span><span class="p">}],</span> 
-    <span class="dl">"</span><span class="s2">comissions</span><span class="dl">"</span><span class="p">:{</span><span class="dl">"</span><span class="s2">sum_res_nocom</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="dl">"</span><span class="s2">sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="dl">"</span><span class="s2">sum_res</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="dl">"</span><span class="s2">pay_methods_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.55</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">valut_com</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.0001</span><span class="p">,</span><span class="dl">"</span><span class="s2">metod_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank Card</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">74.81BTC</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">minmax</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50 - 3000</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">max</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3000</span><span class="dl">"</span><span class="p">}}}</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
+   <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">buy_payment_methods</span><span class="dl">"</span><span class="p">:[</span>
+        <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank Card</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.55</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">lim</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3000</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">enable_mes</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">25000</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50000</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10</span><span class="dl">"</span>
+        <span class="p">}</span>
+      <span class="p">],</span>
+    <span class="dl">"</span><span class="s2">valuts</span><span class="dl">"</span><span class="p">:[</span>
+        <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">USD</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">number_format</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span>
+        <span class="p">}</span>
+      <span class="p">],</span>
+    <span class="dl">"</span><span class="s2">crypto_valuts</span><span class="dl">"</span><span class="p">:[</span>
+        <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.001</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">number_format</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">5</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">74.810473486663</span><span class="dl">"</span>
+        <span class="p">}</span>
+      <span class="p">],</span>
+    <span class="dl">"</span><span class="s2">comissions</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">sum_res_nocom</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_res</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_methods_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.55</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">valut_com</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.0001</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">metod_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank Card</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">74.81BTC</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">minmax</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50 - 3000</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">max</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3000</span><span class="dl">"</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -838,9 +1616,9 @@ parameters json string with the following fields:</p>
 <blockquote>
 <p>Request getCalcComissions example </p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">http://merchant.transcoin.me/api/process/getCalcComissions/</span><span class="dl">'</span> <span class="o">\</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/getCalcComissions/</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
-  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span><span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">21</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200</span><span class="dl">"</span><span class="p">}</span><span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span><span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">21</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">}</span><span class="o">\</span>
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -880,6 +1658,20 @@ parameters json string with the following fields:</p>
 <td>amount</td>
 <td>float</td>
 <td>Transaction Amount (may be zero)</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>amount</td>
+<td>float</td>
+<td>Transaction Amount (may be zero)</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Partner ID in our system (required)</td>
 <td></td>
 </tr>
 </tbody></table>
