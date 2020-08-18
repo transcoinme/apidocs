@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Public REST API</title>
+    <title>API for Merchant Transcoin.me</title>
 
     <style>
       .highlight table td { padding: 5px; }
@@ -198,7 +198,7 @@
     </style>
     <link href="stylesheets/screen-0a7c4629.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-c427a123.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all_nosearch-c275c2f6.js"></script>
+      <script src="javascripts/all-c5541673.js"></script>
   </head>
 
   <body class="index" data-languages="[&quot;curl examples&quot;]">
@@ -213,36 +213,31 @@
         <div class="lang-selector">
               <a href="#" data-language-name="curl examples">curl examples</a>
         </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
       <ul id="toc" class="toc-list-h1">
           <li>
-            <a href="#public-rest-api" class="toc-h1 toc-link" data-title="Public REST API">Public REST API</a>
+            <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
           </li>
           <li>
-            <a href="#webhooks" class="toc-h1 toc-link" data-title="Webhooks">Webhooks</a>
-          </li>
-          <li>
-            <a href="#delivery-protocol" class="toc-h1 toc-link" data-title="Delivery protocol">Delivery protocol</a>
-          </li>
-          <li>
-            <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
-          </li>
-          <li>
-            <a href="#purchases" class="toc-h1 toc-link" data-title="Purchases">Purchases</a>
+            <a href="#request-description" class="toc-h1 toc-link" data-title="Request Description">Request Description</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#purchases-create-a-purchase-the-main-request-for-any-e-commerce-integration" class="toc-h2 toc-link" data-title="/purchases/ Create a Purchase. The main request for any e-commerce integration.">/purchases/ Create a Purchase. The main request for any e-commerce integration.</a>
+                    <a href="#method-process" class="toc-h2 toc-link" data-title="Method process">Method process</a>
                   </li>
                   <li>
-                    <a href="#request-body" class="toc-h2 toc-link" data-title="Request body">Request body</a>
+                    <a href="#method-merchant" class="toc-h2 toc-link" data-title="Method merchant">Method merchant</a>
                   </li>
                   <li>
-                    <a href="#responses" class="toc-h2 toc-link" data-title="Responses">Responses</a>
+                    <a href="#method-exchange" class="toc-h2 toc-link" data-title="Method exchange">Method exchange</a>
                   </li>
                   <li>
-                    <a href="#success-response" class="toc-h2 toc-link" data-title="Success Response">Success Response</a>
+                    <a href="#method-getcalcdata" class="toc-h2 toc-link" data-title="Method getCalcData">Method getCalcData</a>
                   </li>
                   <li>
-                    <a href="#error-response" class="toc-h2 toc-link" data-title="Error Response">Error Response</a>
+                    <a href="#method-getcalccomissions" class="toc-h2 toc-link" data-title="Method getCalcComissions">Method getCalcComissions</a>
                   </li>
               </ul>
           </li>
@@ -255,76 +250,55 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='public-rest-api'>Public REST API</h1>
-<p>All the endpoints below have a prefix of https://cabinet.marvli.com/api/market/v1/ ( e.g. https://cabinet.marvli.com/api/market/v1/new_payment)</p>
+        <h1 id='introduction'>Introduction</h1>
+<p>Welcome to Transcoin.me API. This API  provide an opportunity to access cryptocurrency exchange and sale transactions.
+This guide provides examples of queries for various purposes: </p>
 
-<p>You will need your API secret key that you can obtain in API section of your company profile. Use it as a bearer token 
-in <code>Authorization</code> header included with every request: <code>Authorization:</code> <code>Bearer &lt;secret key&gt;</code></p>
-<h1 id='webhooks'>Webhooks</h1>
-<p>For creating and modifying webhooks see the Webhook <a href='https://github.com/slatedocs/slate'>CRUD API specification.</a>CRUD API specification.</p>
+<ul>
+<li>process - method to create merchant and exchange transactions;</li>
+<li>getCalcData - data acquisition method for create transactions;</li>
+<li>getCalcComissions - this method provides transaction calculation amount;</li>
+</ul>
 
-<p>Webhook callback payloads of each individual Webhook are signed using a dedicated key pair. The public key can be retrieved from Webhook.public_key. 
-See Authentication below for more details.</p>
-<h1 id='delivery-protocol'>Delivery protocol</h1>
-<p>In case a callback is not successfully delivered (received by the target server and responded to with a 200 series HTTP response code) further 
-attempts will be made to deliver the callback, up to a total of 8 attempts, at exponentially increasing intervals between attempts. If the callback
- is not successfully delivered 36 hours after triggering, no further delivery attempts will be made.</p>
+<p>You can use any means to create API requests. In this guide, curl-based queries will be given as examples.</p>
+<h1 id='request-description'>Request Description</h1>
+<p>Request data exchange takes place in json format. So you must prepare the incoming data accordingly, and also decrypt the response.</p>
+<h2 id='method-process'>Method process</h2>
+<p>Using requests to the process method you can create cryptocurrency exchange transactions. For security reasons, the heading Sign 
+should be added to the request method header. The sign is formed by receiving the MD5 hash of your API key and json query string:</p>
 
-<p>Please note that due to the asynchronous nature of network requests it is possible for a callback delivery confirmation (HTTP response with a 200 series
- status code) to not properly arrive from the callback&#39;s target server. Therefore it is possible in case of severe network faults for the target server
- to receive a callback, respond to it with a 200 series HTTP status code and then receive the same callback after an interval.</p>
+<p><code>sign = md5($json_request_raw.$your_api_key);</code></p>
 
-<p>Callback deliveries are guaranteed to be sequential in relation to events triggered on their source objects. For example, if webhooks have been registered
- for both the purchase.created and purchase.paid events, no purchase.paid callbacks for this Purchase will be delivered until all purchase.created 
- callbacks for this Purchase have been successfully delivered.</p>
-<h1 id='authentication'>Authentication</h1>
-<p>To guarantee the authenticity of delivered callbacks payloads are signed using asymmetric A.K.A. public-key cryptography. Each callback delivery 
-request includes an X-Signature header field. This field contains a base64-encoded RSA PKCS#1 v1.5 signature of the SHA3-256 digest of the 
-request body buffer.</p>
+<p>The type of operation must be specified in request parameter <code>type</code>. The <code>type</code> parameter can take such values: <code>merchant</code>, <code>exchange</code>.</p>
 
-<p>The public key for authenticating a Webhooks is available on Webhook.public_key of the corresponding Webhook.
-The public key for authenticating success callbacks can be retrieved with GET /public_key/.
-Please note the Gateway provider is not responsible for any financial loses incurred due to not implementing payload signature verification.</p>
-<h1 id='purchases'>Purchases</h1><h2 id='purchases-create-a-purchase-the-main-request-for-any-e-commerce-integration'>/purchases/ Create a Purchase. The main request for any e-commerce integration.</h2>
-<p>To run payments in your application use POST /purchases/, request to register payments and receive the checkout link (checkout_url). 
-After the payment is processed, gateway will redirect the client back to your website (take note of success_redirect, failure_redirect).</p>
+<ul>
+<li><code>merchant</code> - creating request for payment with cryptocurrency; </li>
+<li><code>exchange</code> - creating cryptocurrency purchase request;</li>
+<li><code>token</code>    - creating request for the purchase of tokens (game currencies);</li>
+</ul>
 
-<p>You have three options to check payment status: 1) use success_calback parameter of Purchase object; 2) use GET /purchases/<purchase_id>/ request; 3)
- set up a Webhook using the UI or Webhook API to listen to purchase.paid or purchase.payment_failure event on your server.</p>
+<p>The remaining request parameters depend on the type of transaction you are creating.</p>
 
-<p>Using skip_capture flag allows you to separate the authentication and payment execution steps, allowing you to reserve funds on payer’s card 
-account for some time. This flag can also enable preauthorization capability, allowing you to save the card without a financial transaction, if available.</p>
+<p>Parameters for the request type = &#39;merchant&#39;:</p>
 
-<p>In case making a purchase client agrees to store his card for the upcoming purchases, next time he will be able to pay in a single click.</p>
-
-<p>Instead of a redirect you can also utilize Direct Post checkout: you can create an HTML <code>&lt;form&gt;</code> on your website with method=&quot;POST&quot; and action 
-pointing to direct_post_url of a created Purchase. You will also need to saturate form with <code>&lt;input&gt;</code>-s for card data fields. As a result, when
- a payer submits their card data, it will be posted straight to our system, allowing you to customize the checkout as you wish while your PCI 
- DSS requirement is only raised to SAQ A-EP, as your system doesn&#39;t receive or process card data. For more details, see the documentation on 
- Purchase&#39;s direct_post_url field.</p>
-
-<p>To pay for test Purchases, use 4444 3333 2222 1111 as the card number, 123 as CVC, any date/month greater than now as expiry and any (Latin)
- cardholder name. Any other card number/CVC/expiry not greater or equal than the current month will all fail a test payment.</p>
-
-<p>Method has no parameters</p>
-<h2 id='request-body'>Request body</h2>
 <blockquote>
-<p>Request body</p>
+<p>Example of process request type = &#39;merchant&#39; </p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
-  <span class="dl">"</span><span class="s2">client</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test@test.com</span><span class="dl">"</span>
-  <span class="p">},</span>
-  <span class="dl">"</span><span class="s2">purchase</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">products</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">price</span><span class="dl">"</span><span class="p">:</span> <span class="mi">100</span>
-      <span class="p">}</span>
-    <span class="p">]</span>
-  <span class="p">},</span>
-  <span class="dl">"</span><span class="s2">brand_id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">409eb80e-3782-4b1d-afa8-b779759266a5</span><span class="dl">"</span>
-<span class="p">}</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">merchant</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">project_id</span><span class="dl">"</span> <span class="p">:</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">project</span> <span class="nx">id</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">currency</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">crypto_currency</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">order_number</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">24</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">description</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">Order Payment #24</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">date</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">01-06-2020 20:39:32</span><span class="dl">"</span><span class="p">}</span> <span class="err">\</span> 
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -340,1140 +314,829 @@ pointing to direct_post_url of a created Purchase. You will also need to saturat
 </thead><tbody>
 <tr>
 <td>1</td>
-<td>client</td>
-<td>object</td>
-<td>Client data</td>
+<td>project_id</td>
+<td>int</td>
+<td>ID of your project in our system</td>
 <td></td>
 </tr>
 <tr>
 <td>2</td>
-<td>email</td>
-<td>string</td>
-<td>Client email</td>
+<td>amount</td>
+<td>float</td>
+<td>Request amount</td>
 <td></td>
 </tr>
 <tr>
 <td>3</td>
-<td>purchase</td>
-<td>object</td>
-<td>Purchase data</td>
+<td>currency</td>
+<td>string</td>
+<td>Currency abbreviation</td>
 <td></td>
 </tr>
 <tr>
 <td>4</td>
-<td>name</td>
+<td>crypto_currency</td>
 <td>string</td>
-<td>Product name</td>
+<td>Short name for cryptocurrency</td>
 <td></td>
 </tr>
 <tr>
 <td>5</td>
-<td>price</td>
-<td>float</td>
-<td>Product price</td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>brand_id</td>
-<td>string</td>
-<td>Brand ID in our system</td>
-<td></td>
-</tr>
-</tbody></table>
-<h2 id='responses'>Responses</h2>
-<table><thead>
-<tr>
-<th>№</th>
-<th>Code</th>
-<th>Description</th>
-<th></th>
-</tr>
-</thead><tbody>
-<tr>
-<td>1</td>
-<td>201</td>
-<td>OK</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td>400</td>
-<td>Invalid data submitted or request processing error</td>
-<td></td>
-</tr>
-</tbody></table>
-<h2 id='success-response'>Success Response</h2>
-<blockquote>
-<p>Success Response</p>
-</blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
-  <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">3fa85f64-5717-4562-b3fc-2c963f66afa6</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">created_on</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1619740800</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">updated_on</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1619740800</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">client</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">bank_account</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">bank_code</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">user@example.com</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">phone</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">+44 45643564564</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">full_name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">personal_code</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">street_address</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">country</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">city</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">zip_code</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">shipping_street_address</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">shipping_country</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">shipping_city</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">shipping_zip_code</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">cc</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-      <span class="dl">"</span><span class="s2">user@example.com</span><span class="dl">"</span>
-    <span class="p">],</span>
-    <span class="dl">"</span><span class="s2">bcc</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-      <span class="dl">"</span><span class="s2">user@example.com</span><span class="dl">"</span>
-    <span class="p">],</span>
-    <span class="dl">"</span><span class="s2">legal_name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">brand_name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">registration_number</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">tax_number</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span>
-  <span class="p">},</span>
-  <span class="dl">"</span><span class="s2">purchase</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">currency</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">products</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">quantity</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">price</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">discount</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">tax_percent</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span>
-      <span class="p">}</span>
-    <span class="p">],</span>
-    <span class="dl">"</span><span class="s2">total</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">language</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">notes</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">debt</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">subtotal_override</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">total_tax_override</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">total_discount_override</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">total_override</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">request_client_details</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-      <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span>
-    <span class="p">],</span>
-    <span class="dl">"</span><span class="s2">timezone</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Europe/Oslo</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">due_strict</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">email_message</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span>
-  <span class="p">},</span>
-  <span class="dl">"</span><span class="s2">payment</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">is_outgoing</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">payment_type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">purchase</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">currency</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">net_amount</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">fee_amount</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">pending_amount</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">pending_unfreeze_on</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1619740800</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">description</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">paid_on</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1619740800</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">remote_paid_on</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1619740800</span>
-  <span class="p">},</span>
-  <span class="dl">"</span><span class="s2">issuer_details</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">website</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">legal_street_address</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">legal_country</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">legal_city</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">legal_zip_code</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">bank_accounts</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">bank_account</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">bank_code</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span>
-      <span class="p">}</span>
-    <span class="p">],</span>
-    <span class="dl">"</span><span class="s2">legal_name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">brand_name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">registration_number</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">tax_number</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span>
-  <span class="p">},</span>
-  <span class="dl">"</span><span class="s2">transaction_data</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">payment_method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">extra</span><span class="dl">"</span><span class="p">:</span> <span class="p">{},</span>
-    <span class="dl">"</span><span class="s2">country</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">attempts</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-      <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">execute</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">successful</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">payment_method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">extra</span><span class="dl">"</span><span class="p">:</span> <span class="p">{},</span>
-        <span class="dl">"</span><span class="s2">country</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">client_ip</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">processing_time</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1619740800</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-          <span class="dl">"</span><span class="s2">code</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-          <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">]</span>
-  <span class="p">},</span>
-  <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">created</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">status_history</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-    <span class="p">{</span>
-      <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">created</span><span class="dl">"</span><span class="p">,</span>
-      <span class="dl">"</span><span class="s2">timestamp</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1619740800</span><span class="p">,</span>
-      <span class="dl">"</span><span class="s2">related_object</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-        <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">3fa85f64-5717-4562-b3fc-2c963f66afa6</span><span class="dl">"</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">],</span>
-  <span class="dl">"</span><span class="s2">viewed_on</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1619740800</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">company_id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">3fa85f64-5717-4562-b3fc-2c963f66afa6</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">is_test</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">user_id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">3fa85f64-5717-4562-b3fc-2c963f66afa6</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">brand_id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">3fa85f64-5717-4562-b3fc-2c963f66afa6</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">billing_template_id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">3fa85f64-5717-4562-b3fc-2c963f66afa6</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">client_id</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">3fa85f64-5717-4562-b3fc-2c963f66afa6</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">send_receipt</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">is_recurring_token</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">recurring_token</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">3fa85f64-5717-4562-b3fc-2c963f66afa6</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">skip_capture</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">reference_generated</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">reference</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">issued</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2020-04-30</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">due</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1619740800</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">refund_availability</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">all</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">refundable_amount</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">currency_conversion</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">original_currency</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">original_amount</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">exchange_rate</span><span class="dl">"</span><span class="p">:</span> <span class="mi">0</span>
-  <span class="p">},</span>
-  <span class="dl">"</span><span class="s2">payment_method_whitelist</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
-    <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span>
-  <span class="p">],</span>
-  <span class="dl">"</span><span class="s2">success_redirect</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">failure_redirect</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">cancel_redirect</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">success_callback</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">creator_agent</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">platform</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">web</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">product</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">purchases</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">created_from_ip</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">invoice_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">checkout_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">direct_post_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span>
-<span class="p">}</span>
-</code></pre></div>
-<blockquote>
-</blockquote>
-
-<table><thead>
-<tr>
-<th>№</th>
-<th>Parameter name</th>
-<th>Type</th>
-<th>Description</th>
-<th></th>
-</tr>
-</thead><tbody>
-<tr>
-<td>1</td>
-<td>type</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td>id</td>
-<td>string</td>
-<td>Client email</td>
-<td></td>
-</tr>
-<tr>
-<td>3</td>
-<td>created_on</td>
-<td>time</td>
-<td>Creation date</td>
-<td></td>
-</tr>
-<tr>
-<td>4</td>
-<td>updated_on</td>
-<td>time</td>
-<td>UPdate date</td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>bank_account</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>bank_code</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>email</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>phone</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>full_name</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>personal_code</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>street_address</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>country</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>city</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>zip_code</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>shipping_street_address</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>shipping_country</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>shipping_city</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>shipping_zip_code</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>cc</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>bcc</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>legal_name</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>brand_name</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>registration_number</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>tax_number</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>purchase</td>
-<td>object</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>currency</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>products</td>
-<td>object</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>name</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>quantity</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>price</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>discount</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>tax_percent</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>total</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>language</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>notes</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>debt</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>subtotal_override</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>total_tax_override</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>total_discount_override</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>total_override</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>total_override</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>total_override</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>total_override</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>total_override</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>request_client_details</td>
-<td>array</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>timezone</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>due_strict</td>
-<td>bool</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>email_message</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>payment</td>
-<td>object</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>is_outgoing</td>
-<td>bool</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>payment_type</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>amount</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>currency</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>net_amount</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>fee_amount</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>pending_amount</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>pending_unfreeze_on</td>
-<td>time</td>
-<td></td>
+<td>order_number</td>
+<td>int</td>
+<td>The order number in your store (must be unique for a specific project)</td>
 <td></td>
 </tr>
 <tr>
 <td>6</td>
 <td>description</td>
 <td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>paid_on</td>
-<td>time</td>
-<td></td>
+<td>Payment Description</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>remote_paid_on</td>
-<td>time</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>issuer_details</td>
-<td>object</td>
-<td></td>
+<td>7</td>
+<td>autoredirect</td>
+<td>int</td>
+<td>Can take values 0 or 1. Enables automatic redirect</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>website</td>
+<td>8</td>
+<td>success_url</td>
 <td>string</td>
-<td></td>
+<td>URL redirect address for transactions in success status</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>legal_street_address</td>
+<td>9</td>
+<td>fail_url</td>
 <td>string</td>
-<td></td>
+<td>URL redirect address for transactions in fail status</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>legal_country</td>
+<td>10</td>
+<td>date</td>
 <td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>legal_city</td>
-<td>string</td>
-<td></td>
+<td>Order date in date format (&#39;d-m-Y H: i: s&#39;)</td>
 <td></td>
 </tr>
+</tbody></table>
+
+<p>The method returns a response also in json format. Description of the response for a successful outcome:</p>
+
+<blockquote>
+<p>Response example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">37</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">wallet</span><span class="o">&gt;</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.02989888722560715</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">currency</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">fee</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.0014949443612803576</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">qrcode_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;YOUR_API_URL&gt;</span><span class="dl">"</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">checkout_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">&lt;YOUR_API_URL&gt;</span><span class="dl">"</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span>
+ <span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
 <tr>
-<td>6</td>
-<td>legal_zip_code</td>
-<td>string</td>
-<td></td>
-<td></td>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
 </tr>
+</thead><tbody>
 <tr>
-<td>6</td>
-<td>bank_accounts</td>
-<td>object</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>bank_account</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>bank_code</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>legal_name</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>brand_name</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>registration_number</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>tax_number</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>transaction_data</td>
-<td>object</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>payment_method</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>extra</td>
-<td>array`</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>country</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>attempts</td>
-<td>object</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>type</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>successful</td>
+<td>1</td>
+<td>result</td>
 <td>bool</td>
-<td></td>
+<td>True if the request succeeds.</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>payment_method</td>
+<td>2</td>
+<td>id</td>
+<td>int</td>
+<td>Transaction ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>wallet</td>
 <td>string</td>
+<td>Your wallet</td>
 <td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>amount</td>
+<td>float</td>
+<td>Cryptocurrency Amount</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>currency</td>
+<td>int</td>
+<td>Cryptocurrency identifier in our system</td>
 <td></td>
 </tr>
 <tr>
 <td>6</td>
-<td>extra</td>
+<td>fee</td>
+<td>float</td>
+<td>Amount of commission (in cryptocurrency)</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>qrcode_url</td>
+<td>string</td>
+<td>QR code URL</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>checkout_url</td>
+<td>string</td>
+<td>Payment URL</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>test</td>
 <td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
 <td></td>
+</tr>
+</tbody></table>
+
+<p>In case of a negative result, responce will be as follows:</p>
+
+<blockquote>
+<p>Negative response example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span><span class="mi">401</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Wrong input data</span><span class="dl">"</span><span class="p">,</span>
+ <span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts false if errors occurred during execution.</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>country</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>client_ip</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>processing_time</td>
-<td>time</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
+<td>2</td>
 <td>error</td>
-<td>object</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>code</td>
-<td>string</td>
-<td></td>
+<td>int</td>
+<td>Error Code (optional)</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
+<td>3</td>
 <td>message</td>
 <td>string</td>
+<td>Error message</td>
 <td></td>
+</tr>
+</tbody></table>
+
+<p>Description request type=&#39;exchange&#39;:</p>
+
+<blockquote>
+<p>Request type=&#39;exchange&#39; example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">exchange</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">wallet</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your_email@example.com</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;order_url_in_your_store&gt;</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span> <span class="p">}</span> <span class="err">\</span> 
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Partner ID in our system (required)</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>status</td>
+<td>2</td>
+<td>wallet</td>
 <td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>status_history</td>
-<td>object</td>
-<td></td>
+<td>Wallet to send cryptocurrency</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>status</td>
+<td>3</td>
+<td>email</td>
 <td>string</td>
+<td>Customer Email</td>
 <td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>method</td>
+<td>int</td>
+<td>ID of the payment method in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>from</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
 <td></td>
 </tr>
 <tr>
 <td>6</td>
-<td>timestamp</td>
-<td>time</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>related_object</td>
-<td>object</td>
-<td></td>
+<td>to</td>
+<td>int</td>
+<td>Cryptocurrency identifier in our system</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>type</td>
+<td>7</td>
+<td>amount</td>
+<td>float</td>
+<td>Transaction Amount (in EUR or USD)</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>order_url</td>
 <td>string</td>
-<td></td>
+<td>Link to the request page (optional)</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>id</td>
+<td>9</td>
+<td>autoredirect</td>
+<td>int</td>
+<td>Can take values 0 or 1. Enables automatic redirect</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>success_url</td>
 <td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>viewed_on</td>
-<td>time</td>
-<td></td>
+<td>URL redirect address for transactions in success status</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>company_id</td>
+<td>11</td>
+<td>fail_url</td>
 <td>string</td>
-<td></td>
+<td>URL redirect address for transactions in fail status</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>is_test</td>
+<td>12</td>
+<td>test</td>
 <td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
 <td></td>
+</tr>
+</tbody></table>
+
+<p>The method returns a response also in json format. Description of the response for a successful outcome:</p>
+
+<blockquote>
+<p>Successfull response type=&#39;exchange&#39; example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span> 
+    <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">exchange_data</span><span class="dl">"</span><span class="p">:{</span>   
+        <span class="dl">"</span><span class="s2">request_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">request</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">user_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">user</span><span class="dl">'</span><span class="s1">s ID&gt;,
+        "from":2,
+        "to":3,
+        "method":2,
+        "sum":200,
+        "wallet":&lt;your wallet&gt;,
+        "id":19
+    },
+    “request_url”: "&lt;your API URL&gt;/&lt;your ID&gt;/&lt;request ID&gt;/",
+    "test":true
+}
+</span></code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts true if the request succeeds.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>exchange_data</td>
+<td>array</td>
+<td>array with exchange data</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>id</td>
+<td>int</td>
+<td>Transaction ID of your exchange in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>request_id</td>
+<td>string</td>
+<td>ID of your exchange request in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Your partner ID in our system</td>
 <td></td>
 </tr>
 <tr>
 <td>6</td>
 <td>user_id</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>brand_id</td>
-<td>string</td>
-<td></td>
+<td>int</td>
+<td>Customer  ID in our system</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>billing_template_id</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>client_id</td>
-<td>string</td>
-<td></td>
+<td>7</td>
+<td>method</td>
+<td>int</td>
+<td>ID of the payment method in our system</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>send_receipt</td>
-<td>bool</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>is_recurring_token</td>
-<td>bool</td>
-<td></td>
+<td>8</td>
+<td>from</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>recurring_token</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>skip_capture</td>
-<td>bool</td>
-<td></td>
+<td>9</td>
+<td>to</td>
+<td>int</td>
+<td>Cryptocurrency identifier in our system</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>reference_generated</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>reference</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>issued</td>
-<td>date</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>due</td>
-<td>time</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>refund_availability</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>refundable_amount</td>
+<td>10</td>
+<td>sum</td>
 <td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>currency_conversion</td>
-<td>object</td>
-<td></td>
+<td>Transaction Amount (in EUR or USD)</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>original_currency</td>
+<td>11</td>
+<td>wallet</td>
 <td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>original_amount</td>
-<td>float</td>
-<td></td>
+<td>Wallet to send cryptocurrency</td>
 <td></td>
 </tr>
 <tr>
-<td>6</td>
-<td>exchange_rate</td>
-<td>float</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>success_redirect</td>
-<td>array</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>failure_redirect</td>
+<td>12</td>
+<td>request_url</td>
 <td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>cancel_redirect</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>success_callback</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>creator_agent</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>platform</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>product</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>created_from_ip</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>invoice_url</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>checkout_url</td>
-<td>string</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>direct_post_url</td>
-<td>string</td>
-<td></td>
+<td>Request URL</td>
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='error-response'>Error Response</h2>
+
+<p>The structure of the negative response is identical to that described above.</p>
+
+<p>Description request type=&#39;token&#39;:</p>
+
 <blockquote>
-<p>Error Response</p>
+<p>Request type=&#39;token&#39; example</p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
-  <span class="dl">"</span><span class="s2">__all__</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">descriptive error message</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">code</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">error_code</span><span class="dl">"</span>
-  <span class="p">}</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your partner id&gt;</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">200</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">pay_type</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">card</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;user email here&gt;</span><span class="dl">"</span> 
+    <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your wallet here&gt;</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">https://some-where.com</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">lang_code</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">en</span><span class="dl">"</span> <span class="p">}</span> <span class="o">\</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Your partner ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>amount</td>
+<td>float</td>
+<td>Request amount</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>pay_type</td>
+<td>string</td>
+<td>Optional parameter, values &quot;card&quot; or &quot;bank&quot;. The default is &quot;card&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>from</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>email</td>
+<td>string</td>
+<td>User email</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>wallet</td>
+<td>string</td>
+<td>User wallet</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>order_url</td>
+<td>string</td>
+<td>Link to the request page (optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>lang_code</td>
+<td>string</td>
+<td>Language code in ISO format  (en,ru,lv,ee)</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>autoredirect</td>
+<td>int</td>
+<td>Can take values 0 or 1. Enables automatic redirect</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>success_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in success status</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>fail_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in fail status</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>The method returns a response also in json format. Description of the response for a successful outcome:</p>
+
+<blockquote>
+<p>Successfull response type=&#39;token&#39; example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span> 
+    <span class="err">“</span><span class="nx">result</span><span class="err">”</span><span class="p">:</span> <span class="err">“</span><span class="kc">true</span><span class="err">”</span> 
+    <span class="err">“</span><span class="nx">request_url</span><span class="err">”</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your API URL&gt;/&lt;your partner ID&gt;/&lt;request ID&gt;/</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">token_data</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="mi">30</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">request_id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Cfh9EiIa3T1icutc</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="mi">6943</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">user_id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">23752</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">created</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2020-08-05 14:01:46</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">tkn_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">&lt;name of token&gt;</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">tkn_price</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">&lt;token price&gt;</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">tkn_sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your wallet here</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="se">\</span><span class="s2">/&lt;request ID&gt;</span><span class="se">\</span><span class="s2">/</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts true if the request succeeds.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>token_data</td>
+<td>array</td>
+<td>array with exchange data</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>id</td>
+<td>int</td>
+<td>Transaction ID of your token exchange in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>request_id</td>
+<td>string</td>
+<td>ID of your exchange request in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Your partner ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>user_id</td>
+<td>int</td>
+<td>Customer  ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>created</td>
+<td>date</td>
+<td>Date of creating token transaction</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>tkn_name</td>
+<td>string</td>
+<td>Name of your token</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>tkn_price</td>
+<td>float</td>
+<td>Token price</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>sum</td>
+<td>float</td>
+<td>Transaction Amount (in EUR or USD)</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>method</td>
+<td>int</td>
+<td>ID of the payment method in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>tkn_sum</td>
+<td>float</td>
+<td>Number of tokens to be purchased</td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
+<td>from</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>14</td>
+<td>to</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>15</td>
+<td>wallet</td>
+<td>string</td>
+<td>Wallet to send cryptocurrency</td>
+<td></td>
+</tr>
+<tr>
+<td>16</td>
+<td>status</td>
+<td>int</td>
+<td>ID of transaction status</td>
+<td></td>
+</tr>
+<tr>
+<td>17</td>
+<td>order_url</td>
+<td>string</td>
+<td>Order URL</td>
+<td></td>
+</tr>
+<tr>
+<td>18</td>
+<td>test</td>
+<td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>In case of a negative result, responce will be as follows:</p>
+
+<blockquote>
+<p>Negative response example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span><span class="mi">401</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Wrong input data</span><span class="dl">"</span><span class="p">,</span>
+ <span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts false if errors occurred during execution.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>error</td>
+<td>int</td>
+<td>Error Code (optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>message</td>
+<td>string</td>
+<td>Error message</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id='method-merchant'>Method merchant</h2>
+<blockquote>
+<p>Example of merchant method </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/merchant/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">project_id</span><span class="dl">"</span> <span class="p">:</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">project</span> <span class="nx">id</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">transaction_id</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">63</span><span class="p">}</span> <span class="err">\</span> 
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<p>The method allows you to track the statuses of transactions. This method require 
+your project_id and transaction_id as input data and returns response a string in json format.</p>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>project_id</td>
+<td>int</td>
+<td>ID of your project in our system (required)</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>transaction_id</td>
+<td>int</td>
+<td>ID of transaction to track status (required)</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>Response of merchant method example </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>   
+    <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">63</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">new</span><span class="dl">"</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span>
 <span class="p">}</span>
 </code></pre></div>
 <blockquote>
@@ -1490,16 +1153,688 @@ pointing to direct_post_url of a created Purchase. You will also need to saturat
 </thead><tbody>
 <tr>
 <td>1</td>
-<td>&quot;<strong>all</strong>&quot;</td>
-<td>object</td>
-<td>Object whitch stores error data</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts true if the request succeeds.</td>
 <td></td>
 </tr>
 <tr>
 <td>2</td>
-<td>code</td>
+<td>data</td>
+<td>array</td>
+<td>Array with response data. Such structure</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>id</td>
 <td>int</td>
-<td>Error Code</td>
+<td>ID of transaction</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>status</td>
+<td>string</td>
+<td>Status. May be &quot;new&quot;,&quot;pending&quot;,&quot;success&quot;,&quot;cancel&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>test</td>
+<td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>If the result is negative, the method will return a responce with the following structure:</p>
+
+<blockquote>
+<p>Negative response example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span><span class="mi">401</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Wrong input data</span><span class="dl">"</span><span class="p">,</span>
+ <span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts false if errors occurred during execution.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>error</td>
+<td>int</td>
+<td>Error Code (optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>message</td>
+<td>string</td>
+<td>Error message</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id='method-exchange'>Method exchange</h2>
+<blockquote>
+<p>Example of exchange method </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/exchange/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span> <span class="p">:</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">exchange_id</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">22565</span><span class="p">}</span> <span class="err">\</span> 
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<p>Almost completely similar to the merchant method except for the input data. Also allows you 
+to track the statuses of exchange transactions. This method require your partner_id and exchange_id 
+as input data and returns response a string in json format.</p>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Your ID in our system (required)</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>transaction_id</td>
+<td>int</td>
+<td>ID of exchange to track status (required)</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>Response of exchange method example </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>   
+    <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">22553</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">pending</span><span class="dl">"</span>
+    <span class="p">},</span>
+    <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span>
+<span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts true if the request succeeds.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>data</td>
+<td>array</td>
+<td>Array with response data. Such structure</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>id</td>
+<td>int</td>
+<td>ID of exchange</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>status</td>
+<td>string</td>
+<td>Status. May be &quot;new&quot;,&quot;pending&quot;,&quot;success&quot;,&quot;cancel&quot;</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>test</td>
+<td>bool</td>
+<td>Sign of a test order. If true, the order is test.</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>If the result is negative, the method will return a responce with the following structure:</p>
+
+<blockquote>
+<p>Negative response example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span><span class="mi">401</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Wrong input data</span><span class="dl">"</span><span class="p">,</span>
+ <span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts false if errors occurred during execution.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>error</td>
+<td>int</td>
+<td>Error Code (optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>message</td>
+<td>string</td>
+<td>Error message</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id='method-getcalcdata'>Method getCalcData</h2>
+<blockquote>
+<p>Request getCalcData example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/getCalcData</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span> <span class="p">}</span> <span class="err">\</span> 
+
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<p>Method provides data for the preliminary calculation of the transaction (payment amounts and commissions).
+This method require your partner_id as input data and returns response a string in json format.</p>
+
+<p>Method response returns a fairly large array of data:</p>
+
+<blockquote>
+<p>Responce getCalcData example </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
+   <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">buy_payment_methods</span><span class="dl">"</span><span class="p">:[</span>
+        <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank Card</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.55</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">lim</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3000</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">enable_mes</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">25000</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50000</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">lim_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">10</span><span class="dl">"</span>
+        <span class="p">}</span>
+      <span class="p">],</span>
+    <span class="dl">"</span><span class="s2">valuts</span><span class="dl">"</span><span class="p">:[</span>
+        <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">USD</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">number_format</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span>
+        <span class="p">}</span>
+      <span class="p">],</span>
+    <span class="dl">"</span><span class="s2">crypto_valuts</span><span class="dl">"</span><span class="p">:[</span>
+        <span class="p">{</span>
+            <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.001</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">number_format</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">5</span><span class="dl">"</span><span class="p">,</span>
+            <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">74.810473486663</span><span class="dl">"</span>
+        <span class="p">}</span>
+      <span class="p">],</span>
+    <span class="dl">"</span><span class="s2">comissions</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">sum_res_nocom</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_res</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_methods_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3.55</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">valut_com</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.0001</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">metod_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank Card</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">74.81BTC</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">minmax</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50 - 3000</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">max</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3000</span><span class="dl">"</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Always true.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>buy_payment_methods</td>
+<td>array</td>
+<td>Array with data of payment methods.</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>An array has the following element structure:</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>id - method identifier in our system;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>name - name of the method;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>com - method commission amount;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>our_com - сумма комиссии за транзакцию;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>min - the minimum transaction amount;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>lim - maximum transaction amount;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>enable_mes - whether the method is allowed;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>lim_day - limit the amount of payments per day;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>lim_month - monthly payment limit;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>lim_count - limit transactions count per day;</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>sell_payment_methods</td>
+<td>array</td>
+<td>Completely similar to buy_payment_methods</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>valuts</td>
+<td>array</td>
+<td>An array of currencies. An array has the following element structure:</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>id - currency identifier in our system;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>name - currency name;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>com - commission for operations in this currency;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>number_format - the number of digits after the decimal point;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>reserv - available quantity of cryptocurrency;</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>crypto_valuts</td>
+<td>array</td>
+<td>An array of cryptocurrencies. The structure is similar to the structure of valuts</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id='method-getcalccomissions'>Method getCalcComissions</h2>
+<p>The getCalcComissions method allows you to calculate transaction fees. Method expects as
+parameters json string with the following fields:</p>
+
+<blockquote>
+<p>Request getCalcComissions example </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/getCalcComissions/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span><span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">21</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">}</span><span class="o">\</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>from</td>
+<td>int</td>
+<td>currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>to</td>
+<td>int</td>
+<td>cryptocurrency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>method</td>
+<td>int</td>
+<td>method identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>amount</td>
+<td>float</td>
+<td>Transaction Amount (may be zero)</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>amount</td>
+<td>float</td>
+<td>Transaction Amount (may be zero)</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Partner ID in our system (required)</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>You will receive the answer as follows:</p>
+
+<blockquote>
+<p>Request getCalcComissions example </p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>   <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">metod_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Skrill</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">max</span><span class="dl">"</span><span class="p">:</span><span class="mi">3000</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">minmax</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50 - 3000</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="mf">3.5</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_methods_com</span><span class="dl">"</span><span class="p">:</span><span class="mf">1.76</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">74.81 BTC</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum</span><span class="dl">"</span><span class="p">:</span><span class="mf">473.69999999999993</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_res</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.07431916</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_res_nocom</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.07441915846815432</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">valut_com</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.0001</span>
+    <span class="p">}</span> 
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>true (in case of positive result)</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>data</td>
+<td>array</td>
+<td>Array with commission calculation data. The array has the following structure:</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>sum_res_nocom - amount in cryptocurrency, excluding commission;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>sum - amount of commission;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>sum_res - the total amount in cryptocurrency;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>pay_methods_com - payment method commission (%);</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>our_com - transaction fee;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>valut_com - conversion fee;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>metod_name - name of the payment method;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>minmax - a line of limits in the form “<minimum value> - <maximum value>”;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>min - the minimum transaction amount;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>max - maximum transaction amount;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>reserv - reserve cryptocurrency available.</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>If the result is negative, the method will return a responce with the following structure:</p>
+
+<blockquote>
+<p>Negative response example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span><span class="mi">401</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Wrong input data</span><span class="dl">"</span><span class="p">,</span>
+ <span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>result</td>
+<td>bool</td>
+<td>Accepts false if errors occurred during execution.</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>error</td>
+<td>int</td>
+<td>Error Code (optional)</td>
 <td></td>
 </tr>
 <tr>
