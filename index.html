@@ -247,6 +247,12 @@
                   </li>
               </ul>
           </li>
+          <li>
+            <a href="#signature-creation" class="toc-h1 toc-link" data-title="Signature creation">Signature creation</a>
+          </li>
+          <li>
+            <a href="#webhooks" class="toc-h1 toc-link" data-title="Webhooks">Webhooks</a>
+          </li>
       </ul>
         <ul class="toc-footer">
             <li><a href='https://merch.transcoin.me'>Sign Up for a Developer Key</a></li>
@@ -271,9 +277,7 @@ This guide provides examples of queries for various purposes: </p>
 <p>Request data exchange takes place in json format. So you must prepare the incoming data accordingly, and also decrypt the response.</p>
 <h2 id='method-process'>Method process</h2>
 <p>Using requests to the process method you can create cryptocurrency exchange transactions. For security reasons, the heading Sign 
-should be added to the request method header. The sign is formed by receiving the MD5 hash of your API key and json query string:</p>
-
-<p><code>sign = md5($json_request_raw.$your_api_key);</code></p>
+should be added to the request method header. See the &#39;Signature creation&#39; section.</p>
 
 <p>The type of operation must be specified in request parameter <code>type</code>. The <code>type</code> parameter can take such values: <code>merchant</code>, <code>exchange</code>.</p>
 
@@ -2375,6 +2379,65 @@ Method expects as parameters json string with the following fields:</p>
 <td>message</td>
 <td>string</td>
 <td>Error message</td>
+<td></td>
+</tr>
+</tbody></table>
+<h1 id='signature-creation'>Signature creation</h1>
+<p>For security reasons, the heading Sign should be added to the request method header.
+The sign is formed by receiving the MD5 hash of your API key and json request string:</p>
+
+<p><code>sign = md5($json_request_raw.$your_api_key);</code></p>
+
+<p>For <code>merchant</code> transaction you need your &#39;<project api key>&#39;, for <code>exchange</code>,<code>token</code>,<code>direct</code> transaction
+you need your &#39;<partner api key>&#39;. You can find it in the settings section in our site.</p>
+<h1 id='webhooks'>Webhooks</h1>
+<p>To track status changes for your transactions, our system can send you a webhook.
+To receive webhooks you need to fill in the fields callback on project settings page or
+api_url_post on your exchange partner settings page. You must enter there the full URL address 
+to which the webhook will be sent.</p>
+
+<blockquote>
+<p>Request body structure example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
+    <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">22430</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">failed</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">exchange</span><span class="dl">"</span>
+    <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">""</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>id</td>
+<td>int</td>
+<td>Transaction ID in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>status</td>
+<td>string</td>
+<td>Transaction status at WHICH status of the transaction has changed</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>type</td>
+<td>string</td>
+<td>Transaction type can take the following values: exchange,merchant</td>
 <td></td>
 </tr>
 </tbody></table>
