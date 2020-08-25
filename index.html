@@ -277,7 +277,7 @@ This guide provides examples of queries for various purposes: </p>
 <p>Request data exchange takes place in json format. So you must prepare the incoming data accordingly, and also decrypt the response.</p>
 <h2 id='method-process'>Method process</h2>
 <p>Using requests to the process method you can create cryptocurrency exchange transactions. For security reasons, the heading Sign 
-should be added to the request method header. See the &#39;Signature creation&#39; section.</p>
+should be added to the request method header. See the <a href="#Signature%20creation">internal link</a>&#39;Signature creation&#39; section.</p>
 
 <p>The type of operation must be specified in request parameter <code>type</code>. The <code>type</code> parameter can take such values: <code>merchant</code>, <code>exchange</code>.</p>
 
@@ -2388,8 +2388,8 @@ The sign is formed by receiving the MD5 hash of your API key and json request st
 
 <p><code>sign = md5($json_request_raw.$your_api_key);</code></p>
 
-<p>For <code>merchant</code> transaction you need your &#39;<project api key>&#39;, for <code>exchange</code>,<code>token</code>,<code>direct</code> transaction
-you need your &#39;<partner api key>&#39;. You can find it in the settings section in our site.</p>
+<p>For <code>merchant</code> transaction you need your &#39;project api key&#39;, for <code>exchange</code>,<code>token</code>,<code>direct</code> transaction
+you need your &#39;partner api key&#39;. You can find it in the settings section in our site.</p>
 <h1 id='webhooks'>Webhooks</h1>
 <p>To track status changes for your transactions, our system can send you a webhook.
 To receive webhooks you need to fill in the fields callback on project settings page or
@@ -2440,7 +2440,16 @@ to which the webhook will be sent.</p>
 <td>Transaction type can take the following values: exchange,merchant</td>
 <td></td>
 </tr>
+<tr>
+<td>3</td>
+<td>message</td>
+<td>string</td>
+<td>Optional. Change status message</td>
+<td></td>
+</tr>
 </tbody></table>
+
+<p>Each web hook has a signature in the header. See section &#39;Signature creation&#39;.</p>
 
       </div>
       <div class="dark-box">
