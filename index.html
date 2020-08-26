@@ -242,9 +242,6 @@
                   <li>
                     <a href="#method-calcdirectcomissions" class="toc-h2 toc-link" data-title="Method calcDirectComissions">Method calcDirectComissions</a>
                   </li>
-                  <li>
-                    <a href="#method-calcdirectexchangesellsum" class="toc-h2 toc-link" data-title="Method calcDirectExchangeSellSum">Method calcDirectExchangeSellSum</a>
-                  </li>
               </ul>
           </li>
           <li>
@@ -285,6 +282,7 @@ should be added to the request method header. See the <a href="#Signature%20crea
 <li><code>merchant</code> - creating request for payment with cryptocurrency; </li>
 <li><code>exchange</code> - creating cryptocurrency purchase request;</li>
 <li><code>token</code>    - creating request for the purchase of tokens (game currencies);</li>
+<li><code>direct</code>   - creating cryptocurrency purchase and sale requests;</li>
 </ul>
 
 <p>The remaining request parameters depend on the type of transaction you are creating.</p>
@@ -548,7 +546,6 @@ should be added to the request method header. See the <a href="#Signature%20crea
     <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">wallet</span><span class="o">&gt;</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your_email@example.com</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;order_url_in_your_store&gt;</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
@@ -613,13 +610,6 @@ should be added to the request method header. See the <a href="#Signature%20crea
 <td>amount</td>
 <td>float</td>
 <td>Transaction Amount (in EUR or USD)</td>
-<td></td>
-</tr>
-<tr>
-<td>8</td>
-<td>order_url</td>
-<td>string</td>
-<td>Link to the request page (optional)</td>
 <td></td>
 </tr>
 <tr>
@@ -789,7 +779,6 @@ should be added to the request method header. See the <a href="#Signature%20crea
     <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span> 
     <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;user email here&gt;</span><span class="dl">"</span> 
     <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your wallet here&gt;</span><span class="dl">"</span><span class="p">,</span> 
-    <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">https://some-where.com</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
@@ -851,34 +840,27 @@ should be added to the request method header. See the <a href="#Signature%20crea
 </tr>
 <tr>
 <td>7</td>
-<td>order_url</td>
-<td>string</td>
-<td>Link to the request page (optional)</td>
-<td></td>
-</tr>
-<tr>
-<td>8</td>
 <td>lang_code</td>
 <td>string</td>
 <td>Language code in ISO format  (en,ru,lv,ee)</td>
 <td></td>
 </tr>
 <tr>
-<td>9</td>
+<td>8</td>
 <td>autoredirect</td>
 <td>int</td>
 <td>Can take values 0 or 1. Enables automatic redirect</td>
 <td></td>
 </tr>
 <tr>
-<td>10</td>
+<td>9</td>
 <td>success_url</td>
 <td>string</td>
 <td>URL redirect address for transactions in success status</td>
 <td></td>
 </tr>
 <tr>
-<td>11</td>
+<td>10</td>
 <td>fail_url</td>
 <td>string</td>
 <td>URL redirect address for transactions in fail status</td>
@@ -1098,23 +1080,25 @@ should be added to the request method header. See the <a href="#Signature%20crea
 
 <p>Description request type=&#39;direct&#39;:</p>
 
+<p>This type of request allows you to create transactions not only for the purchase but also for the sale of cryptocurrency.
+In both cases, the structure of requests is identical, only currencies and amounts are swapped.</p>
+
 <blockquote>
-<p>Request type=&#39;direct&#39; example</p>
+<p>Request type=&#39;direct&#39; buy example</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
     <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">direct</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span> <span class="p">}</span> <span class="err">\</span> 
+    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span> 
     <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">wallet</span><span class="o">&gt;</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;order_url_in_your_store&gt;</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">}</span> <span class="o">\</span>
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -1139,21 +1123,21 @@ should be added to the request method header. See the <a href="#Signature%20crea
 <td>2</td>
 <td>wallet</td>
 <td>string</td>
-<td>Wallet to send cryptocurrency (only for buy exchange)</td>
+<td>Wallet to send cryptocurrency (required, only for buy)</td>
 <td></td>
 </tr>
 <tr>
 <td>3</td>
 <td>from</td>
 <td>int</td>
-<td>Currency identifier in our system</td>
+<td>Currency identifier in our system (required)</td>
 <td></td>
 </tr>
 <tr>
 <td>4</td>
 <td>to</td>
 <td>int</td>
-<td>Cryptocurrency identifier in our system</td>
+<td>Cryptocurrency identifier in our system (required)</td>
 <td></td>
 </tr>
 <tr>
@@ -1165,9 +1149,9 @@ should be added to the request method header. See the <a href="#Signature%20crea
 </tr>
 <tr>
 <td>6</td>
-<td>order_url</td>
-<td>string</td>
-<td>Link to the request page (optional)</td>
+<td>receive</td>
+<td>float</td>
+<td>Transaction reciving sum (in crypto currency)</td>
 <td></td>
 </tr>
 <tr>
@@ -1193,14 +1177,125 @@ should be added to the request method header. See the <a href="#Signature%20crea
 </tr>
 </tbody></table>
 
+<blockquote>
+<p>Request type=&#39;direct&#39; sale example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/process/</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">direct</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">receive</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">}</span> <span class="o">\</span>
+</code></pre></div>
+<blockquote>
+</blockquote>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Type</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>partner_id</td>
+<td>int</td>
+<td>Partner ID in our system (required)</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>from</td>
+<td>int</td>
+<td>Currency identifier in our system (required)</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>to</td>
+<td>int</td>
+<td>Cryptocurrency identifier in our system (required)</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>amount</td>
+<td>float</td>
+<td>Transaction Amount (in crypto currency)</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>receive</td>
+<td>float</td>
+<td>Transaction reciving sum (in EUR or USD)</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>autoredirect</td>
+<td>int</td>
+<td>Can take values 0 or 1. Enables automatic redirect</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>success_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in success status</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>fail_url</td>
+<td>string</td>
+<td>URL redirect address for transactions in fail status</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>To successfully create a transaction, you must specify one of the fields &#39;amount&#39; or &#39;receive&#39;,
+if both are specified, priority will be given to &#39;amount&#39;. if both are not transmitted or equal to zero you will get an error.</p>
+
 <p>The method returns a response also in json format. Description of the response for a successful outcome:</p>
 
 <blockquote>
 <p>Successfull response type=&#39;direct&#39; example</p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span> 
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
     <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">exchange_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">exchange</span> <span class="nx">ID</span><span class="o">&gt;</span>
+    <span class="dl">"</span><span class="s2">exchange_id</span><span class="dl">"</span><span class="p">:</span><span class="mi">22698</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
+        <span class="dl">"</span><span class="s2">sum_from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.03157722</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_with_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.02990336</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">com_valut_from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.0001</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_methods_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_pay_methods_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.00000000</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.00157386</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">valut_from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">metod_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank transfer(SEPA)</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">rate</span><span class="dl">"</span><span class="p">:</span><span class="mf">6688.21216</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200.00</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_to_with_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200.00</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">com_valut_to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">valut_to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100000.00 EUR</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_method_min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_method_max</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">20000</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_method_lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">30000</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_method_lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">80000</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_method_lim_day_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">40</span><span class="dl">"</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 <blockquote>
@@ -1227,6 +1322,153 @@ should be added to the request method header. See the <a href="#Signature%20crea
 <td>exchange_id</td>
 <td>int</td>
 <td>ID of new exchange transaction in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>data</td>
+<td>array</td>
+<td>array with exchange and comissions data:</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>sum_from - transaction Amount</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>sum_with_com - transaction Amount minus comissions</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>com_valut_from - sum of valut from comission</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>pay_methods_com - comission of pay method (%)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>sum_pay_methods_com - sum comission of pay method</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>our_com - comission of transcoin (%)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>sum_our_com - sum comission of transcoin</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>string</td>
+<td>valut_from - valut from name</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>string</td>
+<td>metod_name - pay method name</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>rate - exchange rate</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>sum_to - amount you will receive after the exchange</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>sum_to_with_com - amount you will receive after the exchange minus commission</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>com_valut_to - sum of valut to comission</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>string</td>
+<td>valut_to - valut to name</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>reserv - the amount in the output currency held in reserve</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>int</td>
+<td>pay_method_min - minimum transaction amount (in EUR)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>int</td>
+<td>pay_method_max - maximum transaction amount (in EUR)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>int</td>
+<td>pay_method_lim_day - daily limit amount (in EUR)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>int</td>
+<td>pay_method_lim_month - monthly limit amount (in EUR)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>int</td>
+<td>pay_method_lim_day_count - transaction limit per day</td>
 <td></td>
 </tr>
 </tbody></table>
@@ -1808,13 +2050,6 @@ parameters json string with the following fields:</p>
 <td></td>
 </tr>
 <tr>
-<td>4</td>
-<td>amount</td>
-<td>float</td>
-<td>Transaction Amount (may be zero)</td>
-<td></td>
-</tr>
-<tr>
 <td>5</td>
 <td>partner_id</td>
 <td>int</td>
@@ -1993,251 +2228,22 @@ parameters json string with the following fields:</p>
 </tr>
 </tbody></table>
 <h2 id='method-calcdirectcomissions'>Method calcDirectComissions</h2>
-<p>The calcDirectComissions method allows you to calculate direct exchange transaction fees. Method expects as
-parameters json string with the following fields:</p>
-
-<blockquote>
-<p>Request calcDirectComissions example </p>
-</blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/calcDirectComissions/</span><span class="dl">'</span> <span class="o">\</span>
-  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
-  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span><span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">}</span><span class="o">\</span>
-</code></pre></div>
-<blockquote>
-</blockquote>
-
-<table><thead>
-<tr>
-<th>№</th>
-<th>Parameter name</th>
-<th>Type</th>
-<th>Description</th>
-<th></th>
-</tr>
-</thead><tbody>
-<tr>
-<td>1</td>
-<td>from</td>
-<td>int</td>
-<td>currency identifier in our system</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td>to</td>
-<td>int</td>
-<td>cryptocurrency identifier in our system</td>
-<td></td>
-</tr>
-<tr>
-<td>3</td>
-<td>amount</td>
-<td>float</td>
-<td>Transaction Amount (may be zero)</td>
-<td></td>
-</tr>
-<tr>
-<td>4</td>
-<td>partner_id</td>
-<td>int</td>
-<td>Partner ID in our system (required)</td>
-<td></td>
-</tr>
-</tbody></table>
-
-<p>You will receive the answer as follows:</p>
-
-<blockquote>
-<p>Response calcDirectComissions example </p>
-</blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code>
-<span class="p">{</span>
-<span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
-<span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
-    <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200.00</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">rate</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.00014886047307858</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">sum_res</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.02877893</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">sum_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.00089316</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">pay_methods_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">valut_com</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.0001</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">valut1</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">valut2</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">metod_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank transfer(SEPA)</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">74.81 BTC</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">minmax</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50 - 20000</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">max</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">20000</span><span class="dl">"</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-</code></pre></div>
-<blockquote>
-</blockquote>
-
-<table><thead>
-<tr>
-<th>№</th>
-<th>Parameter name</th>
-<th>Type</th>
-<th>Description</th>
-<th></th>
-</tr>
-</thead><tbody>
-<tr>
-<td>1</td>
-<td>result</td>
-<td>bool</td>
-<td>true (in case of positive result)</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td>data</td>
-<td>array</td>
-<td>Array with commission calculation data. The array has the following structure:</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>float</td>
-<td>amount - amount sum to bee changed;</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>float</td>
-<td>rate - exchange rate;</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>float</td>
-<td>sum_res - the total amount in result currency, excluded comission ;</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>float</td>
-<td>sum_com - amount of commission;</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>int</td>
-<td>pay_methods_com - payment method commission (%);</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>int</td>
-<td>our_com - transaction fee (%);</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>float</td>
-<td>valut_com - conversion fee;</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>string</td>
-<td>metod_name - name of the payment method;</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>string</td>
-<td>minmax - a line of limits in the form “<minimum value> - <maximum value>”;</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>int</td>
-<td>min - the minimum transaction amount;</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>int</td>
-<td>max - maximum transaction amount;</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td>float</td>
-<td>reserv - reserve cryptocurrency available.</td>
-<td></td>
-</tr>
-</tbody></table>
-
-<p>If the result is negative, the method will return a responce with the following structure:</p>
-
-<blockquote>
-<p>Negative response example</p>
-</blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span><span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">false</span><span class="p">,</span>
- <span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">:</span><span class="mi">401</span><span class="p">,</span>
- <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Wrong input data</span><span class="dl">"</span><span class="p">,</span>
- <span class="p">}</span>
-</code></pre></div>
-<blockquote>
-</blockquote>
-
-<table><thead>
-<tr>
-<th>№</th>
-<th>Parameter name</th>
-<th>Type</th>
-<th>Description</th>
-<th></th>
-</tr>
-</thead><tbody>
-<tr>
-<td>1</td>
-<td>result</td>
-<td>bool</td>
-<td>Accepts false if errors occurred during execution.</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td>error</td>
-<td>int</td>
-<td>Error Code (optional)</td>
-<td></td>
-</tr>
-<tr>
-<td>3</td>
-<td>message</td>
-<td>string</td>
-<td>Error message</td>
-<td></td>
-</tr>
-</tbody></table>
-<h2 id='method-calcdirectexchangesellsum'>Method calcDirectExchangeSellSum</h2>
-<p>The calcDirectExchangeSellSum method allows you to calculate direct exchange amount in initial currency required to get the requested sum. 
+<p>The calcDirectComissions method allows you to calculate direct exchange transaction fees. 
+Requests are completely similar to requests of the &#39;process&#39; method type &#39;direct&#39;. The method calculates commissions for both buying and selling cryptocurrency.
 Method expects as parameters json string with the following fields:</p>
 
 <blockquote>
-<p>Request calcDirectExchangeSellSum example </p>
+<p>Request calcDirectComissions example</p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/calcDirectExchangeSellSum/</span><span class="dl">'</span> <span class="o">\</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/calcDirectComissions/</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
-  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span><span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">receive</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">}</span><span class="o">\</span>
+  <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">receive</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200</span><span class="dl">"</span> <span class="p">}</span> <span class="o">\</span>
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -2253,48 +2259,72 @@ Method expects as parameters json string with the following fields:</p>
 </thead><tbody>
 <tr>
 <td>1</td>
-<td>from</td>
-<td>int</td>
-<td>currency identifier in our system</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td>to</td>
-<td>int</td>
-<td>cryptocurrency identifier in our system</td>
-<td></td>
-</tr>
-<tr>
-<td>3</td>
-<td>receive</td>
-<td>float</td>
-<td>Transaction amount you want to receive</td>
-<td></td>
-</tr>
-<tr>
-<td>4</td>
 <td>partner_id</td>
 <td>int</td>
 <td>Partner ID in our system (required)</td>
 <td></td>
 </tr>
+<tr>
+<td>3</td>
+<td>from</td>
+<td>int</td>
+<td>Currency identifier in our system (required)</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>to</td>
+<td>int</td>
+<td>Cryptocurrency identifier in our system (required)</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>amount</td>
+<td>float</td>
+<td>Transaction Amount (in EUR or USD)</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>receive</td>
+<td>float</td>
+<td>Transaction reciving sum (in crypto currency)</td>
+<td></td>
+</tr>
 </tbody></table>
 
-<p>You will receive the answer as follows:</p>
+<p>Fields &#39;amount&#39; or &#39;receive&#39; can be empty or omitted, if both are specified, priority will be given to &#39;amount&#39;. 
+As a result, you will receive a response similar to the response of  method &#39;process&#39; request type &#39;direct&#39;</p>
 
 <blockquote>
-<p>Response calcDirectExchangeSellSum example </p>
+<p>Successfull response type=&#39;direct&#39; example</p>
 </blockquote>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code>
-<span class="p">{</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
     <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
-        <span class="dl">"</span><span class="s2">sum</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.03612814</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">valut</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span>
+        <span class="dl">"</span><span class="s2">sum_from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.03157722</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_with_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.02990336</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">com_valut_from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.0001</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_methods_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_pay_methods_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.00000000</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">our_com</span><span class="dl">"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_our_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.00157386</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">valut_from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">metod_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">Bank transfer(SEPA)</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">rate</span><span class="dl">"</span><span class="p">:</span><span class="mf">6688.21216</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200.00</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">sum_to_with_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200.00</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">com_valut_to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">valut_to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">reserv</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100000.00 EUR</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_method_min</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">50</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_method_max</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">20000</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_method_lim_day</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">30000</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_method_lim_month</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">80000</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">pay_method_lim_day_count</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">40</span><span class="dl">"</span>
     <span class="p">}</span>
 <span class="p">}</span>
-
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -2312,31 +2342,159 @@ Method expects as parameters json string with the following fields:</p>
 <td>1</td>
 <td>result</td>
 <td>bool</td>
-<td>true (in case of positive result)</td>
+<td>Accepts true if the request succeeds.</td>
 <td></td>
 </tr>
 <tr>
 <td>2</td>
 <td>data</td>
 <td>array</td>
-<td>Array with commission calculation data. The array has the following structure:</td>
+<td>array with exchange and comissions data:</td>
 <td></td>
 </tr>
 <tr>
 <td></td>
 <td></td>
 <td>float</td>
-<td>sum - amount in initial currency required to get the requested sum</td>
+<td>sum_from - transaction Amount</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>sum_with_com - transaction Amount minus comissions</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>com_valut_from - sum of valut from comission</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>pay_methods_com - comission of pay method (%)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>sum_pay_methods_com - sum comission of pay method</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>our_com - comission of transcoin (%)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>sum_our_com - sum comission of transcoin</td>
 <td></td>
 </tr>
 <tr>
 <td></td>
 <td></td>
 <td>string</td>
-<td>valut - name of the received currency;</td>
+<td>valut_from - valut from name</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>string</td>
+<td>metod_name - pay method name</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>rate - exchange rate</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>sum_to - amount you will receive after the exchange</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>sum_to_with_com - amount you will receive after the exchange minus commission</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>com_valut_to - sum of valut to comission</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>string</td>
+<td>valut_to - valut to name</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>float</td>
+<td>reserv - the amount in the output currency held in reserve</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>int</td>
+<td>pay_method_min - minimum transaction amount (in EUR)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>int</td>
+<td>pay_method_max - maximum transaction amount (in EUR)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>int</td>
+<td>pay_method_lim_day - daily limit amount (in EUR)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>int</td>
+<td>pay_method_lim_month - monthly limit amount (in EUR)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>int</td>
+<td>pay_method_lim_day_count - transaction limit per day</td>
 <td></td>
 </tr>
 </tbody></table>
+
+<p>The structure of the negative response is identical to that described above.</p>
 
 <p>If the result is negative, the method will return a responce with the following structure:</p>
 
