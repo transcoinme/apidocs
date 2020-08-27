@@ -30,15 +30,14 @@ Request data exchange takes place in json format. So you must prepare the incomi
 ## Method process
 
 Using requests to the process method you can create cryptocurrency exchange transactions. For security reasons, the heading Sign 
-should be added to the request method header. The sign is formed by receiving the MD5 hash of your API key and json query string:
-
-`sign = md5($json_request_raw.$your_api_key);`
+should be added to the request method header. See the [internal link](#Signature creation)'Signature creation' section.
 
 The type of operation must be specified in request parameter `type`. The `type` parameter can take such values: `merchant`, `exchange`.
 
 * `merchant` - creating request for payment with cryptocurrency; 
 * `exchange` - creating cryptocurrency purchase request;
 * `token`    - creating request for the purchase of tokens (game currencies);
+* `direct`   - creating cryptocurrency purchase and sale requests;
 
 The remaining request parameters depend on the type of transaction you are creating.
 
@@ -145,7 +144,6 @@ curl 'https://api.transcoin.io/v1/process/' \
 	"to":"3",
 	"wallet":<your wallet>,
 	"email":"your_email@example.com",
-	"order_url": "<order_url_in_your_store>",
 	"autoredirect": 1,
     "success_url": '<transaction_success_url>',
     "fail_url": '<transaction_fail_url>',
@@ -162,7 +160,6 @@ curl 'https://api.transcoin.io/v1/process/' \
 | 5 | from           | int    | Currency identifier in our system                       |   |
 | 6 | to             | int    | Cryptocurrency identifier in our system                 |   |
 | 7 | amount         | float  | Transaction Amount (in EUR or USD)                      |   |
-| 8 | order_url      | string | Link to the request page (optional)                     |   |
 | 9 | autoredirect   | int    | Can take values 0 or 1. Enables automatic redirect      |   |
 | 10| success_url    | string | URL redirect address for transactions in success status |   |
 | 11| fail_url       | string | URL redirect address for transactions in fail status    |   |
@@ -218,13 +215,13 @@ curl 'https://api.transcoin.io/v1/process/' \
   -H 'Content-Type: application/json' \
   -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
   --data {
+	"type":"token",
 	"partner_id" : "<your partner id>", 
     "amount" : 200, 
 	"pay_type" : "card", 
     "from" : "2", 
 	"email" : "<user email here>" 
     "wallet" : "<your wallet here>", 
-    "order_url"	: "https://some-where.com",
 	"autoredirect": 1,
     "success_url": '<transaction_success_url>',
     "fail_url": '<transaction_fail_url>',
@@ -240,11 +237,10 @@ curl 'https://api.transcoin.io/v1/process/' \
 | 4 | from   	      | int    | Currency identifier in our system                                     |   |
 | 5 | email           | string | User email															   |   |
 | 6 | wallet          | string | User wallet                                                           |   |
-| 7 | order_url       | string | Link to the request page (optional)                                   |   |
-| 8 | lang_code       | string | Language code in ISO format  (en,ru,lv,ee)                            |   |
-| 9 | autoredirect    | int    | Can take values 0 or 1. Enables automatic redirect                    |   |
-| 10| success_url     | string | URL redirect address for transactions in success status               |   |
-| 11| fail_url        | string | URL redirect address for transactions in fail status                  |   |
+| 7 | lang_code       | string | Language code in ISO format  (en,ru,lv,ee)                            |   |
+| 8 | autoredirect    | int    | Can take values 0 or 1. Enables automatic redirect                    |   |
+| 9 | success_url     | string | URL redirect address for transactions in success status               |   |
+| 10| fail_url        | string | URL redirect address for transactions in fail status                  |   |
 
 
 The method returns a response also in json format. Description of the response for a successful outcome:
@@ -316,6 +312,135 @@ In case of a negative result, responce will be as follows:
 | 2 | error          | int    | Error Code (optional)                                 |   |
 | 3 | message        | string | Error message                                         |   |
 
+Description request type='direct':
+
+This type of request allows you to create transactions not only for the purchase but also for the sale of cryptocurrency.
+In both cases, the structure of requests is identical, only currencies and amounts are swapped.
+
+> Request type='direct' buy example
+ 
+```javascript
+curl 'https://api.transcoin.io/v1/process/' \
+  -H 'Content-Type: application/json' \
+  -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
+  --data {
+	"type":"direct",
+	"partner_id":<your ID>, 
+	"wallet":<your wallet>,
+	"from":"2",
+	"to":"3",
+	"amount":"100",
+	"autoredirect": 1,
+    "success_url": '<transaction_success_url>',
+    "fail_url": '<transaction_fail_url>'} \
+```
+>
+
+| № | Parameter name | Type   | Description                                             |   |
+|---|----------------|--------|---------------------------------------------------------|---|
+| 1 | partner_id     | int    | Partner ID in our system (required)                     |   |
+| 2 | wallet         | string | Wallet to send cryptocurrency (required, only for buy)  |   |
+| 3 | from           | int    | Currency identifier in our system (required)            |   |
+| 4 | to             | int    | Cryptocurrency identifier in our system (required)      |   |
+| 5 | amount         | float  | Transaction Amount (in EUR or USD)                      |   |
+| 6 | receive        | float  | Transaction reciving sum (in crypto currency)           |   |
+| 7 | autoredirect   | int    | Can take values 0 or 1. Enables automatic redirect      |   |
+| 8 | success_url    | string | URL redirect address for transactions in success status |   |
+| 9 | fail_url       | string | URL redirect address for transactions in fail status    |   |
+
+> Request type='direct' sale example
+ 
+```javascript
+curl 'https://api.transcoin.io/v1/process/' \
+  -H 'Content-Type: application/json' \
+  -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
+  --data {
+	"type":"direct",
+	"partner_id":<your ID>, 
+	"from":"3",
+	"to":"2",
+	"receive":"100",
+	"autoredirect": 1,
+    "success_url": '<transaction_success_url>',
+    "fail_url": '<transaction_fail_url>'} \
+```
+>
+
+| № | Parameter name | Type   | Description                                             |   |
+|---|----------------|--------|---------------------------------------------------------|---|
+| 1 | partner_id     | int    | Partner ID in our system (required)                     |   |
+| 2 | from           | int    | Currency identifier in our system (required)            |   |
+| 3 | to             | int    | Cryptocurrency identifier in our system (required)      |   |
+| 4 | amount         | float  | Transaction Amount (in crypto currency)                 |   |
+| 5 | receive        | float  | Transaction reciving sum (in EUR or USD)                |   |
+| 6 | autoredirect   | int    | Can take values 0 or 1. Enables automatic redirect      |   |
+| 7 | success_url    | string | URL redirect address for transactions in success status |   |
+| 8 | fail_url       | string | URL redirect address for transactions in fail status    |   |
+
+To successfully create a transaction, you must specify one of the fields 'amount' or 'receive',
+if both are specified, priority will be given to 'amount'. if both are not transmitted or equal to zero you will get an error.
+
+The method returns a response also in json format. Description of the response for a successful outcome:
+
+> Successfull response type='direct' example
+ 
+```javascript
+{
+	"result":true,
+	"exchange_id":22698,
+	"data":{
+		"sum_from":"0.03157722",
+		"sum_with_com":"0.02990336",
+		"com_valut_from":"0.0001",
+		"pay_methods_com":"0",
+		"sum_pay_methods_com":"0.00000000",
+		"our_com":5,
+		"sum_our_com":"0.00157386",
+		"valut_from":"BTC",
+		"metod_name":"Bank transfer(SEPA)",
+		"rate":6688.21216,
+		"sum_to":"200.00",
+		"sum_to_with_com":"200.00",
+		"com_valut_to":"0",
+		"valut_to":"EUR",
+		"reserv":"100000.00 EUR",
+		"pay_method_min":"50",
+		"pay_method_max":"20000",
+		"pay_method_lim_day":"30000",
+		"pay_method_lim_month":"80000",
+		"pay_method_lim_day_count":"40"
+	}
+}
+```
+>
+
+| № | Parameter name | Type   | Description                                             |   |
+|---|----------------|--------|---------------------------------------------------------|---|
+| 1 | result         | bool   | Accepts true if the request succeeds.                   |   |
+| 2 | exchange_id    | int    | ID of new exchange transaction in our system            |   |
+| 3 | data           | array  | array with exchange and comissions data:                |   |
+|   |                | float  | sum_from - transaction Amount                           |   |
+|   |                | float  | sum_with_com - transaction Amount minus comissions      |   |
+|   |                | float  | com_valut_from - sum of valut from comission            |   |
+|   |                | float  | pay_methods_com - comission of pay method (%)           |   |
+|   |                | float  | sum_pay_methods_com - sum comission of pay method       |   |
+|   |                | float  | our_com - comission of transcoin (%)                    |   |
+|   |                | float  | sum_our_com - sum comission of transcoin                |   |
+|   |                | string | valut_from - valut from name                            |   |
+|   |                | string | metod_name - pay method name                            |   |
+|   |                | float  | rate - exchange rate                                    |   |
+|   |                | float  | sum_to - amount you will receive after the exchange     |   |
+|   |                | float  | sum_to_with_com - amount you will receive after the exchange minus commission    |   |
+|   |                | float  | com_valut_to - sum of valut to comission                |   |
+|   |                | string | valut_to - valut to name                                |   |
+|   |                | float  | reserv - the amount in the output currency held in reserve |   |
+|   |                | int    | pay_method_min - minimum transaction amount (in EUR)    |   |
+|   |                | int    | pay_method_max - maximum transaction amount (in EUR)    |   |
+|   |                | int    | pay_method_lim_day - daily limit amount (in EUR)        |   |
+|   |                | int    | pay_method_lim_month - monthly limit amount (in EUR)    |   |
+|   |                | int    | pay_method_lim_day_count - transaction limit per day    |   |
+
+The structure of the negative response is identical to that described above.
 
 ## Method merchant 
 
@@ -327,7 +452,7 @@ curl 'https://api.transcoin.io/v1/merchant/' \
   -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
   --data {
 	"project_id" : <your project id>,
-	"transaction_id" : 63} \ 
+	"transaction_id" : <transaction ID>} \ 
 ```
 >
 
@@ -392,7 +517,7 @@ curl 'https://api.transcoin.io/v1/exchange/' \
   -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
   --data {
 	"partner_id" : <your ID>,
-	"exchange_id" : 22565} \ 
+	"exchange_id" : <exchange ID>} \ 
 ```
 >
 
@@ -403,7 +528,7 @@ as input data and returns response a string in json format.
 | № | Parameter name | Type   | Description                                           |   |
 |---|----------------|--------|-------------------------------------------------------|---|
 | 1 | partner_id     | int    | Your ID in our system (required)                      |   |
-| 2 | transaction_id | int    | ID of exchange to track status (required)             |   |
+| 2 | exchange_id    | int    | ID of exchange to track status (required)             |   |
 
 > Response of exchange method example 
 
@@ -453,7 +578,7 @@ If the result is negative, the method will return a responce with the following 
 > Request getCalcData example
  
 ```javascript
-curl 'https://api.transcoin.io/v1/process/getCalcData' \
+curl 'https://api.transcoin.io/v1/getCalcData' \
   -H 'Content-Type: application/json' \
   --data { "partner_id":<your ID> } \ 
  
@@ -551,7 +676,7 @@ parameters json string with the following fields:
 > Request getCalcComissions example 
 
 ```javascript
-curl 'https://api.transcoin.io/v1/process/getCalcComissions/' \
+curl 'https://api.transcoin.io/v1/getCalcComissions/' \
   -H 'Content-Type: application/json' \
   --data {"from":"2","to":"3","method":"21","amount":"200","partner_id":<your ID>}\
 ```
@@ -563,12 +688,11 @@ curl 'https://api.transcoin.io/v1/process/getCalcComissions/' \
 | 2 | to     		 | int   | cryptocurrency identifier in our system    |   |
 | 3 | method 		 | int   | method identifier in our system            |   |
 | 4 | amount 		 | float | Transaction Amount (may be zero)           |   |  
-| 4 | amount 		 | float | Transaction Amount (may be zero)           |   |  
 | 5 | partner_id     | int   | Partner ID in our system (required)        |   |
  
 You will receive the answer as follows:
 
-> Request getCalcComissions example 
+> Responce getCalcComissions example 
 
 ```javascript
 { 	"result":true,
@@ -591,18 +715,18 @@ You will receive the answer as follows:
 | № | Parameter name | Type  | Description                                                                    |   |
 |---|----------------|-------|--------------------------------------------------------------------------------|---|
 | 1 | result 		 | bool  | true (in case of positive result)                                              |   |
-| 3 | data    		 | array | Array with commission calculation data. The array has the following structure: |   |
-|   |        		 |       | sum_res_nocom - amount in cryptocurrency, excluding commission;                |   |
-|   |        		 |       | sum - amount of commission;                                                    |   |
-|   |        		 |       | sum_res - the total amount in cryptocurrency;                                  |   |
-|   |        		 |       | pay_methods_com - payment method commission (%);                               |   |
-|   |        		 |       | our_com - transaction fee;                                                     |   |
-|   |        		 |       | valut_com - conversion fee;                                                    |   |
-|   |        		 |       | metod_name - name of the payment method;                                       |   |
-|   |        		 |       | minmax - a line of limits in the form “<minimum value> - <maximum value>”;     |   |
-|   |        		 |       | min - the minimum transaction amount;                                          |   |
-|   |        		 |       | max - maximum transaction amount;                                              |   |
-|   |        		 |       | reserv - reserve cryptocurrency available.                                     |   | 
+| 2 | data    		 | array | Array with commission calculation data. The array has the following structure: |   |
+|   |        		 | float | sum_res_nocom - amount in cryptocurrency, excluding commission;                |   |
+|   |        		 | float | sum - amount of commission;                                                    |   |
+|   |        		 | float | sum_res - the total amount in cryptocurrency;                                  |   |
+|   |        		 | int   | pay_methods_com - payment method commission (%);                               |   |
+|   |        		 | int   | our_com - transaction fee;                                                     |   |
+|   |        		 | float | valut_com - conversion fee;                                                    |   |
+|   |        		 | string| metod_name - name of the payment method;                                       |   |
+|   |        		 | string| minmax - a line of limits in the form “<minimum value> - <maximum value>”;     |   |
+|   |        		 | int   | min - the minimum transaction amount;                                          |   |
+|   |        		 | int   | max - maximum transaction amount;                                              |   |
+|   |        		 | float | reserv - reserve cryptocurrency available.                                     |   | 
  
  
 If the result is negative, the method will return a responce with the following structure:
@@ -624,4 +748,151 @@ If the result is negative, the method will return a responce with the following 
 | 2 | error          | int    | Error Code (optional)                                 |   |
 | 3 | message        | string | Error message                                         |   |
  
+## Method calcDirectComissions
 
+The calcDirectComissions method allows you to calculate direct exchange transaction fees. 
+Requests are completely similar to requests of the 'process' method type 'direct'. The method calculates commissions for both buying and selling cryptocurrency.
+Method expects as parameters json string with the following fields:
+
+> Request calcDirectComissions example
+
+```javascript
+curl 'https://api.transcoin.io/v1/calcDirectComissions/' \
+  -H 'Content-Type: application/json' \
+  -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
+  --data {
+	"partner_id":<your ID>, 
+	"from":"3",
+	"to":"2",
+	"amount":"0",
+	"receive":"200" } \
+```
+>
+
+| № | Parameter name | Type   | Description                                             |   |
+|---|----------------|--------|---------------------------------------------------------|---|
+| 1 | partner_id     | int    | Partner ID in our system (required)                     |   |
+| 3 | from           | int    | Currency identifier in our system (required)            |   |
+| 4 | to             | int    | Cryptocurrency identifier in our system (required)      |   |
+| 5 | amount         | float  | Transaction Amount (in EUR or USD)                      |   |
+| 6 | receive        | float  | Transaction reciving sum (in crypto currency)           |   |
+
+Fields 'amount' or 'receive' can be empty or omitted, if both are specified, priority will be given to 'amount'. 
+As a result, you will receive a response similar to the response of  method 'process' request type 'direct'
+
+> Successfull response type='direct' example
+ 
+```javascript
+{
+	"result":true,
+	"data":{
+		"sum_from":"0.03157722",
+		"sum_with_com":"0.02990336",
+		"com_valut_from":"0.0001",
+		"pay_methods_com":"0",
+		"sum_pay_methods_com":"0.00000000",
+		"our_com":5,
+		"sum_our_com":"0.00157386",
+		"valut_from":"BTC",
+		"metod_name":"Bank transfer(SEPA)",
+		"rate":6688.21216,
+		"sum_to":"200.00",
+		"sum_to_with_com":"200.00",
+		"com_valut_to":"0",
+		"valut_to":"EUR",
+		"reserv":"100000.00 EUR",
+		"pay_method_min":"50",
+		"pay_method_max":"20000",
+		"pay_method_lim_day":"30000",
+		"pay_method_lim_month":"80000",
+		"pay_method_lim_day_count":"40"
+	}
+}
+```
+>
+
+| № | Parameter name | Type   | Description                                             |   |
+|---|----------------|--------|---------------------------------------------------------|---|
+| 1 | result         | bool   | Accepts true if the request succeeds.                   |   |
+| 2 | data           | array  | array with exchange and comissions data:                |   |
+|   |                | float  | sum_from - transaction Amount                           |   |
+|   |                | float  | sum_with_com - transaction Amount minus comissions      |   |
+|   |                | float  | com_valut_from - sum of valut from comission            |   |
+|   |                | float  | pay_methods_com - comission of pay method (%)           |   |
+|   |                | float  | sum_pay_methods_com - sum comission of pay method       |   |
+|   |                | float  | our_com - comission of transcoin (%)                    |   |
+|   |                | float  | sum_our_com - sum comission of transcoin                |   |
+|   |                | string | valut_from - valut from name                            |   |
+|   |                | string | metod_name - pay method name                            |   |
+|   |                | float  | rate - exchange rate                                    |   |
+|   |                | float  | sum_to - amount you will receive after the exchange     |   |
+|   |                | float  | sum_to_with_com - amount you will receive after the exchange minus commission    |   |
+|   |                | float  | com_valut_to - sum of valut to comission                |   |
+|   |                | string | valut_to - valut to name                                |   |
+|   |                | float  | reserv - the amount in the output currency held in reserve |   |
+|   |                | int    | pay_method_min - minimum transaction amount (in EUR)    |   |
+|   |                | int    | pay_method_max - maximum transaction amount (in EUR)    |   |
+|   |                | int    | pay_method_lim_day - daily limit amount (in EUR)        |   |
+|   |                | int    | pay_method_lim_month - monthly limit amount (in EUR)    |   |
+|   |                | int    | pay_method_lim_day_count - transaction limit per day    |   |
+
+The structure of the negative response is identical to that described above.
+ 
+If the result is negative, the method will return a responce with the following structure:
+
+> Negative response example
+ 
+```javascript
+{"result":false,
+ "error":401,
+ "message":"Wrong input data",
+ }
+```
+
+>
+
+| № | Parameter name | Type   | Description                                           |   |
+|---|----------------|--------|-------------------------------------------------------|---|
+| 1 | result         | bool   | Accepts false if errors occurred during execution.    |   |
+| 2 | error          | int    | Error Code (optional)                                 |   |
+| 3 | message        | string | Error message                                         |   |
+
+# Signature creation
+
+For security reasons, the heading Sign should be added to the request method header.
+The sign is formed by receiving the MD5 hash of your API key and json request string:
+
+`sign = md5($json_request_raw.$your_api_key);`
+
+For `merchant` transaction you need your 'project api key', for `exchange`,`token`,`direct` transaction
+you need your 'partner api key'. You can find it in the settings section in our site.
+
+# Webhooks
+
+To track status changes for your transactions, our system can send you a webhook.
+To receive webhooks you need to fill in the fields callback on project settings page or
+api_url_post on your exchange partner settings page. You must enter there the full URL address 
+to which the webhook will be sent.
+
+> Request body structure example
+
+```javascript
+{
+	"id":"22430",
+	"status":"failed",
+	"type":"exchange"
+	"message":""
+
+}
+```
+
+>
+
+| № | Parameter name | Type   | Description                                                          |   |
+|---|----------------|--------|----------------------------------------------------------------------|---|
+| 1 | id             | int    | Transaction ID in our system                                         |   |
+| 2 | status         | string | Transaction status at WHICH status of the transaction has changed    |   |
+| 3 | type           | string | Transaction type can take the following values: exchange,merchant    |   |
+| 3 | message        | string | Optional. Change status message                                      |   |
+
+Each web hook has a signature in the header. See section 'Signature creation'.
