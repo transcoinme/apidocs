@@ -320,7 +320,7 @@ You can specify the following values as a payment method: &#39;card&#39;, &#39;b
 <p>Using requests to the process method you can create cryptocurrency exchange transactions. For security reasons, the heading Sign 
 should be added to the request method header. See the <a href="#signature-creation">Signature creation</a> section.</p>
 
-<p>The type of operation must be specified in request parameter <code>type</code>. The <code>type</code> parameter can take such values: <code>merchant</code>, <code>exchange</code>.</p>
+<p>The type of operation must be specified in request parameter <code>type</code>. The <code>type</code> parameter can take such values: <code>merchant</code>, <code>exchange</code>,<code>token</code>,<code>direct</code>.</p>
 
 <ul>
 <li><code>merchant</code> - creating request for payment with cryptocurrency; </li>
@@ -2013,7 +2013,7 @@ This method require your partner_id as input data and returns response a string 
 <td></td>
 <td></td>
 <td></td>
-<td>our_com - сумма комиссии за транзакцию;</td>
+<td>our_com - amount of the transaction fee to transcoin;</td>
 <td></td>
 </tr>
 <tr>
