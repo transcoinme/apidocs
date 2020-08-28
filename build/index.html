@@ -222,6 +222,9 @@
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
           </li>
           <li>
+            <a href="#cuurencies-and-pay-methods" class="toc-h1 toc-link" data-title="Cuurencies and pay methods">Cuurencies and pay methods</a>
+          </li>
+          <li>
             <a href="#request-description" class="toc-h1 toc-link" data-title="Request Description">Request Description</a>
               <ul class="toc-list-h2">
                   <li>
@@ -267,9 +270,50 @@ This guide provides examples of queries for various purposes: </p>
 <li>process - method to create merchant and exchange transactions;</li>
 <li>getCalcData - data acquisition method for create transactions;</li>
 <li>getCalcComissions - this method provides transaction calculation amount;</li>
+<li>merchant - the method allows you to control transaction type=&#39;merchant&#39; status;</li>
+<li>exchange - the method allows you to control transaction type=&#39;exchange&#39; status;</li>
+<li>calcDirectComissions - this method provides transaction type=&#39;direct&#39; calculation amount;</li>
 </ul>
 
 <p>You can use any means to create API requests. In this guide, curl-based queries will be given as examples.</p>
+<h1 id='cuurencies-and-pay-methods'>Cuurencies and pay methods</h1>
+<p>At the moment, you can make exchange transactions in the following currencies &#39;USD&#39;,&#39;EUR&#39; and crypto currencies &#39;BTC&#39;,&#39;ETH&#39;,&#39;LTC&#39;,&#39;XRP&#39;.
+Enter the appropriate currency codes in the fields &#39;from&#39;, &#39;to&#39;.
+You can specify the following values as a payment method: &#39;card&#39;, &#39;bank&#39;, &#39;skrill&#39;, &#39;neteller&#39;. Explanation in the table below.</p>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Value</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>card</td>
+<td>Use a bank card to pay for the transaction (visa, mastercard, etc.)</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>bank</td>
+<td>Use bank transfer to pay for the transaction (SEPA)</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>skrill</td>
+<td>Use Skrill Money Transfer pay for the transaction</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>neteller</td>
+<td>Use Neteller pay system pay for the transactions</td>
+<td></td>
+</tr>
+</tbody></table>
 <h1 id='request-description'>Request Description</h1>
 <p>Request data exchange takes place in json format. So you must prepare the incoming data accordingly, and also decrypt the response.</p>
 <h2 id='method-process'>Method process</h2>
@@ -338,14 +382,14 @@ should be added to the request method header. See the <a href="#Signature%20crea
 <td>3</td>
 <td>currency</td>
 <td>string</td>
-<td>Currency abbreviation</td>
+<td>Currency code</td>
 <td></td>
 </tr>
 <tr>
 <td>4</td>
 <td>crypto_currency</td>
 <td>string</td>
-<td>Short name for cryptocurrency</td>
+<td>Cryptocurrency code</td>
 <td></td>
 </tr>
 <tr>
@@ -402,6 +446,9 @@ should be added to the request method header. See the <a href="#Signature%20crea
  <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span> <span class="o">&lt;</span><span class="nx">your</span> <span class="nx">wallet</span><span class="o">&gt;</span><span class="p">,</span>
  <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.02989888722560715</span><span class="p">,</span>
  <span class="dl">"</span><span class="s2">currency</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">currency_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">request_currency</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+ <span class="dl">"</span><span class="s2">request_currency_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
  <span class="dl">"</span><span class="s2">fee</span><span class="dl">"</span><span class="p">:</span><span class="mf">0.0014949443612803576</span><span class="p">,</span>
  <span class="dl">"</span><span class="s2">qrcode_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;YOUR_API_URL&gt;</span><span class="dl">"</span><span class="p">,</span>
  <span class="dl">"</span><span class="s2">checkout_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">&lt;YOUR_API_URL&gt;</span><span class="dl">"</span><span class="p">,</span>
@@ -457,27 +504,48 @@ should be added to the request method header. See the <a href="#Signature%20crea
 </tr>
 <tr>
 <td>6</td>
+<td>currency_name</td>
+<td>string</td>
+<td>Cryptocurrency code</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>request_currency</td>
+<td>int</td>
+<td>Currency identifier in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>request_currency_name</td>
+<td>string</td>
+<td>Currency code</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
 <td>fee</td>
 <td>float</td>
 <td>Amount of commission (in cryptocurrency)</td>
 <td></td>
 </tr>
 <tr>
-<td>7</td>
+<td>10</td>
 <td>qrcode_url</td>
 <td>string</td>
 <td>QR code URL</td>
 <td></td>
 </tr>
 <tr>
-<td>8</td>
+<td>11</td>
 <td>checkout_url</td>
 <td>string</td>
 <td>Payment URL</td>
 <td></td>
 </tr>
 <tr>
-<td>9</td>
+<td>12</td>
 <td>test</td>
 <td>bool</td>
 <td>Sign of a test order. If true, the order is test.</td>
@@ -540,10 +608,10 @@ should be added to the request method header. See the <a href="#Signature%20crea
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
     <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">exchange</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">card</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">wallet</span><span class="o">&gt;</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your_email@example.com</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -595,14 +663,14 @@ should be added to the request method header. See the <a href="#Signature%20crea
 <td>5</td>
 <td>from</td>
 <td>int</td>
-<td>Currency identifier in our system</td>
+<td>Currency code</td>
 <td></td>
 </tr>
 <tr>
 <td>6</td>
 <td>to</td>
 <td>int</td>
-<td>Cryptocurrency identifier in our system</td>
+<td>Cryptocurrency code</td>
 <td></td>
 </tr>
 <tr>
@@ -653,9 +721,12 @@ should be added to the request method header. See the <a href="#Signature%20crea
         <span class="dl">"</span><span class="s2">request_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">request</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">user_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">user</span><span class="dl">'</span><span class="s1">s ID&gt;,
-        "from":2,
-        "to":3,
-        "method":2,
+        "from":"2",
+        "to":"3",
+        "method":"2",
+        "from_name":"EUR",
+        "to_name":"BTC",
+        "method_name":"card"
         "sum":200,
         "wallet":&lt;your wallet&gt;,
         "id":19
@@ -741,20 +812,41 @@ should be added to the request method header. See the <a href="#Signature%20crea
 </tr>
 <tr>
 <td>10</td>
+<td>from_name</td>
+<td>string</td>
+<td>Currency code</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>to_name</td>
+<td>string</td>
+<td>Cryptocurrency code</td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>method_name</td>
+<td>string</td>
+<td>Name of the payment method in our system</td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
 <td>sum</td>
 <td>float</td>
 <td>Transaction Amount (in EUR or USD)</td>
 <td></td>
 </tr>
 <tr>
-<td>11</td>
+<td>14</td>
 <td>wallet</td>
 <td>string</td>
 <td>Wallet to send cryptocurrency</td>
 <td></td>
 </tr>
 <tr>
-<td>12</td>
+<td>15</td>
 <td>request_url</td>
 <td>string</td>
 <td>Request URL</td>
@@ -777,7 +869,7 @@ should be added to the request method header. See the <a href="#Signature%20crea
     <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your partner id&gt;</span><span class="dl">"</span><span class="p">,</span> 
     <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">200</span><span class="p">,</span> 
     <span class="dl">"</span><span class="s2">pay_type</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">card</span><span class="dl">"</span><span class="p">,</span> 
-    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span> 
+    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span> 
     <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;user email here&gt;</span><span class="dl">"</span> 
     <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your wallet here&gt;</span><span class="dl">"</span><span class="p">,</span> 
     <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -822,7 +914,7 @@ should be added to the request method header. See the <a href="#Signature%20crea
 <td>4</td>
 <td>from</td>
 <td>int</td>
-<td>Currency identifier in our system</td>
+<td>Currency code</td>
 <td></td>
 </tr>
 <tr>
@@ -886,10 +978,13 @@ should be added to the request method header. See the <a href="#Signature%20crea
         <span class="dl">"</span><span class="s2">tkn_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">&lt;name of token&gt;</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">tkn_price</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">&lt;token price&gt;</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">card</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">tkn_sum</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">from_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">to_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">method_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">card</span><span class="dl">"</span>
         <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your wallet here</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="se">\</span><span class="s2">/&lt;request ID&gt;</span><span class="se">\</span><span class="s2">/</span><span class="dl">"</span><span class="p">,</span>
@@ -1005,6 +1100,27 @@ should be added to the request method header. See the <a href="#Signature%20crea
 <td></td>
 </tr>
 <tr>
+<td>14</td>
+<td>from_name</td>
+<td>string</td>
+<td>Currency code</td>
+<td></td>
+</tr>
+<tr>
+<td>14</td>
+<td>to_name</td>
+<td>string</td>
+<td>Currency code</td>
+<td></td>
+</tr>
+<tr>
+<td>14</td>
+<td>method_name</td>
+<td>string</td>
+<td>Pay method name in our system</td>
+<td></td>
+</tr>
+<tr>
 <td>15</td>
 <td>wallet</td>
 <td>string</td>
@@ -1094,8 +1210,8 @@ In both cases, the structure of requests is identical, only currencies and amoun
     <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">direct</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span> 
     <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">wallet</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
@@ -1131,14 +1247,14 @@ In both cases, the structure of requests is identical, only currencies and amoun
 <td>3</td>
 <td>from</td>
 <td>int</td>
-<td>Currency identifier in our system (required)</td>
+<td>Currency code (required)</td>
 <td></td>
 </tr>
 <tr>
 <td>4</td>
 <td>to</td>
 <td>int</td>
-<td>Cryptocurrency identifier in our system (required)</td>
+<td>Cryptocurrency code (required)</td>
 <td></td>
 </tr>
 <tr>
@@ -1187,8 +1303,8 @@ In both cases, the structure of requests is identical, only currencies and amoun
   <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
     <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">direct</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span> 
-    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">receive</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
@@ -1217,14 +1333,14 @@ In both cases, the structure of requests is identical, only currencies and amoun
 <td>2</td>
 <td>from</td>
 <td>int</td>
-<td>Currency identifier in our system (required)</td>
+<td>Currency code (required)</td>
 <td></td>
 </tr>
 <tr>
 <td>3</td>
 <td>to</td>
 <td>int</td>
-<td>Cryptocurrency identifier in our system (required)</td>
+<td>Cryptocurrency code (required)</td>
 <td></td>
 </tr>
 <tr>
@@ -2008,7 +2124,7 @@ parameters json string with the following fields:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="nx">curl</span> <span class="dl">'</span><span class="s1">https://api.transcoin.io/v1/getCalcComissions/</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Content-Type: application/json</span><span class="dl">'</span> <span class="o">\</span>
-  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span><span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">21</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">}</span><span class="o">\</span>
+  <span class="o">--</span><span class="nx">data</span> <span class="p">{</span><span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">skrill</span><span class="dl">"</span><span class="p">,,</span><span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">}</span><span class="o">\</span>
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -2241,8 +2357,8 @@ Method expects as parameters json string with the following fields:</p>
   <span class="o">-</span><span class="nx">H</span> <span class="dl">'</span><span class="s1">Sign: a70e6e5388f23ff6a6da503a82807f3b</span><span class="dl">'</span> <span class="o">\</span>
   <span class="o">--</span><span class="nx">data</span> <span class="p">{</span>
     <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span><span class="p">,</span> 
-    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">3</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">2</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">receive</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">200</span><span class="dl">"</span> <span class="p">}</span> <span class="o">\</span>
 </code></pre></div>

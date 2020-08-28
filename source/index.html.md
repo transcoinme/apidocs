@@ -19,8 +19,24 @@ This guide provides examples of queries for various purposes:
 * process - method to create merchant and exchange transactions;
 * getCalcData - data acquisition method for create transactions;
 * getCalcComissions - this method provides transaction calculation amount;
+* merchant - the method allows you to control transaction type='merchant' status;
+* exchange - the method allows you to control transaction type='exchange' status;
+* calcDirectComissions - this method provides transaction type='direct' calculation amount;
 
 You can use any means to create API requests. In this guide, curl-based queries will be given as examples.
+
+#Cuurencies and pay methods
+
+At the moment, you can make exchange transactions in the following currencies 'USD','EUR' and crypto currencies 'BTC','ETH','LTC','XRP'.
+Enter the appropriate currency codes in the fields 'from', 'to'.
+You can specify the following values as a payment method: 'card', 'bank', 'skrill', 'neteller'. Explanation in the table below.
+
+| № | Value           | Description                                                           |   |
+|---|-----------------|-----------------------------------------------------------------------|---|
+| 1 | card            | Use a bank card to pay for the transaction (visa, mastercard, etc.)   |   |
+| 2 | bank            | Use bank transfer to pay for the transaction (SEPA)                   |   |
+| 3 | skrill          | Use Skrill Money Transfer pay for the transaction                     |   |
+| 4 | neteller        | Use Neteller pay system pay for the transactions                      |   |
 
 
 # Request Description
@@ -68,8 +84,8 @@ curl 'https://api.transcoin.io/v1/process/' \
 |---|-----------------|--------|-----------------------------------------------------------------------|---|
 | 1 | project_id      | int    | ID of your project in our system                                      |   |
 | 2 | amount          | float  | Request amount                                                        |   |
-| 3 | currency        | string | Currency abbreviation                                                 |   |
-| 4 | crypto_currency | string | Short name for cryptocurrency                                         |   |
+| 3 | currency        | string | Currency code                                                         |   |
+| 4 | crypto_currency | string | Cryptocurrency code                                                   |   | 
 | 5 | order_number    | int    | The order number in your store (must be unique for a specific project)|   |
 | 6 | description     | string | Payment Description                                                   |   |
 | 7 | autoredirect    | int    | Can take values 0 or 1. Enables automatic redirect                    |   |
@@ -87,6 +103,9 @@ The method returns a response also in json format. Description of the response f
  "wallet": <your wallet>,
  "amount":0.02989888722560715,
  "currency":"3",
+ "currency_name":"BTC",
+ "request_currency":"2",
+ "request_currency_name":"EUR",
  "fee":0.0014949443612803576,
  "qrcode_url": "<YOUR_API_URL>",
  "checkout_url":"<YOUR_API_URL>",
@@ -96,17 +115,20 @@ The method returns a response also in json format. Description of the response f
 
 >
 
-| № | Parameter name | Type   | Description                                           |   |
-|---|----------------|--------|-------------------------------------------------------|---|
-| 1 | result         | bool   | True if the request succeeds.                         |   |
-| 2 | id             | int    | Transaction ID in our system                          |   |
-| 3 | wallet         | string | Your wallet                                           |   |
-| 4 | amount         | float  | Cryptocurrency Amount                                 |   |
-| 5 | currency       | int    | Cryptocurrency identifier in our system               |   |
-| 6 | fee            | float  | Amount of commission (in cryptocurrency)              |   |
-| 7 | qrcode_url     | string | QR code URL                                           |   |
-| 8 | checkout_url   | string | Payment URL                                           |   |
-| 9 | test           | bool   | Sign of a test order. If true, the order is test.     |   |
+| № | Parameter name        | Type   | Description                                           |   |
+|---|-----------------------|--------|-------------------------------------------------------|---|
+| 1 | result                | bool   | True if the request succeeds.                         |   |
+| 2 | id                    | int    | Transaction ID in our system                          |   |
+| 3 | wallet                | string | Your wallet                                           |   |
+| 4 | amount                | float  | Cryptocurrency Amount                                 |   |
+| 5 | currency              | int    | Cryptocurrency identifier in our system               |   |
+| 6 | currency_name         | string | Cryptocurrency code                                   |   |
+| 7 | request_currency      | int    | Currency identifier in our system                     |   |
+| 8 | request_currency_name | string | Currency code                                         |   |
+| 9 | fee                   | float  | Amount of commission (in cryptocurrency)              |   |
+| 10| qrcode_url            | string | QR code URL                                           |   |
+| 11| checkout_url          | string | Payment URL                                           |   |
+| 12| test                  | bool   | Sign of a test order. If true, the order is test.     |   |
 
 In case of a negative result, responce will be as follows:
 
@@ -138,10 +160,10 @@ curl 'https://api.transcoin.io/v1/process/' \
   -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
   --data {
 	"type":"exchange",
-	"method":"2",
+	"method":"card",
 	"amount":"100",
-	"from":"2",
-	"to":"3",
+	"from":"EUR",
+	"to":"BTC",
 	"wallet":<your wallet>,
 	"email":"your_email@example.com",
 	"autoredirect": 1,
@@ -157,8 +179,8 @@ curl 'https://api.transcoin.io/v1/process/' \
 | 2 | wallet         | string | Wallet to send cryptocurrency                           |   |
 | 3 | email          | string | Customer Email                                          |   |
 | 4 | method         | int    | ID of the payment method in our system                  |   |
-| 5 | from           | int    | Currency identifier in our system                       |   |
-| 6 | to             | int    | Cryptocurrency identifier in our system                 |   |
+| 5 | from           | int    | Currency code                                           |   |
+| 6 | to             | int    | Cryptocurrency code                                     |   |
 | 7 | amount         | float  | Transaction Amount (in EUR or USD)                      |   |
 | 9 | autoredirect   | int    | Can take values 0 or 1. Enables automatic redirect      |   |
 | 10| success_url    | string | URL redirect address for transactions in success status |   |
@@ -176,9 +198,12 @@ The method returns a response also in json format. Description of the response f
 		"request_id":<request ID>,
 		"partner_id":<your ID>,
 		"user_id":<user's ID>,
-		"from":2,
-		"to":3,
-		"method":2,
+		"from":"2",
+		"to":"3",
+		"method":"2",
+		"from_name":"EUR",
+		"to_name":"BTC",
+		"method_name":"card"
 		"sum":200,
 		"wallet":<your wallet>,
 		"id":19
@@ -200,9 +225,12 @@ The method returns a response also in json format. Description of the response f
 | 7 | method         | int    | ID of the payment method in our system                |   |
 | 8 | from           | int    | Currency identifier in our system                     |   |
 | 9 | to             | int    | Cryptocurrency identifier in our system               |   |
-|10 | sum            | float  | Transaction Amount (in EUR or USD)                    |   |
-|11 | wallet         | string | Wallet to send cryptocurrency                         |   |
-|12 | request_url    | string | Request URL                                           |   |
+|10 | from_name      | string | Currency code                                         |   |
+|11 | to_name        | string | Cryptocurrency code                                   |   |
+|12 | method_name    | string | Name of the payment method in our system              |   |
+|13 | sum            | float  | Transaction Amount (in EUR or USD)                    |   |
+|14 | wallet         | string | Wallet to send cryptocurrency                         |   |
+|15 | request_url    | string | Request URL                                           |   |
 
 The structure of the negative response is identical to that described above.
 
@@ -219,7 +247,7 @@ curl 'https://api.transcoin.io/v1/process/' \
 	"partner_id" : "<your partner id>", 
     "amount" : 200, 
 	"pay_type" : "card", 
-    "from" : "2", 
+    "from" : "EUR", 
 	"email" : "<user email here>" 
     "wallet" : "<your wallet here>", 
 	"autoredirect": 1,
@@ -234,7 +262,7 @@ curl 'https://api.transcoin.io/v1/process/' \
 | 1 | partner_id      | int    | Your partner ID in our system                                         |   |
 | 2 | amount          | float  | Request amount                                                        |   |
 | 3 | pay_type        | string | Optional parameter, values "card" or "bank". The default is "card"    |   |
-| 4 | from   	      | int    | Currency identifier in our system                                     |   |
+| 4 | from   	      | int    | Currency code                                                         |   |
 | 5 | email           | string | User email															   |   |
 | 6 | wallet          | string | User wallet                                                           |   |
 | 7 | lang_code       | string | Language code in ISO format  (en,ru,lv,ee)                            |   |
@@ -260,10 +288,13 @@ The method returns a response also in json format. Description of the response f
 		"tkn_name":"<name of token>",
 		"tkn_price":"<token price>",
 		"sum":100,
-		"method":2,
+		"method":"card",
 		"tkn_sum":0,
-		"to":"2",
 		"from":"2",
+		"to":"2",
+		"from_name":"EUR",
+		"to_name":"EUR",
+		"method_name":"card"
 		"wallet":"your wallet here",
 		"status":0,
 		"order_url":"\/<request ID>\/",
@@ -288,6 +319,9 @@ The method returns a response also in json format. Description of the response f
 |12 | tkn_sum        | float  | Number of tokens to be purchased                      |   |
 |13 | from           | int    | Currency identifier in our system                     |   |
 |14 | to             | int    | Currency identifier in our system                     |   |
+|14 | from_name      | string | Currency code                                         |   |
+|14 | to_name        | string | Currency code                                         |   |
+|14 | method_name    | string | Pay method name in our system                         |   |
 |15 | wallet         | string | Wallet to send cryptocurrency                         |   |
 |16 | status         | int    | ID of transaction status                              |   |
 |17 | order_url      | string | Order URL                                             |   |
@@ -327,8 +361,8 @@ curl 'https://api.transcoin.io/v1/process/' \
 	"type":"direct",
 	"partner_id":<your ID>, 
 	"wallet":<your wallet>,
-	"from":"2",
-	"to":"3",
+	"from":"EUR",
+	"to":"BTC",
 	"amount":"100",
 	"autoredirect": 1,
     "success_url": '<transaction_success_url>',
@@ -340,8 +374,8 @@ curl 'https://api.transcoin.io/v1/process/' \
 |---|----------------|--------|---------------------------------------------------------|---|
 | 1 | partner_id     | int    | Partner ID in our system (required)                     |   |
 | 2 | wallet         | string | Wallet to send cryptocurrency (required, only for buy)  |   |
-| 3 | from           | int    | Currency identifier in our system (required)            |   |
-| 4 | to             | int    | Cryptocurrency identifier in our system (required)      |   |
+| 3 | from           | int    | Currency code (required)                                |   |
+| 4 | to             | int    | Cryptocurrency code (required)                          |   |
 | 5 | amount         | float  | Transaction Amount (in EUR or USD)                      |   |
 | 6 | receive        | float  | Transaction reciving sum (in crypto currency)           |   |
 | 7 | autoredirect   | int    | Can take values 0 or 1. Enables automatic redirect      |   |
@@ -357,8 +391,8 @@ curl 'https://api.transcoin.io/v1/process/' \
   --data {
 	"type":"direct",
 	"partner_id":<your ID>, 
-	"from":"3",
-	"to":"2",
+	"from":"BTC",
+	"to":"EUR",
 	"receive":"100",
 	"autoredirect": 1,
     "success_url": '<transaction_success_url>',
@@ -369,8 +403,8 @@ curl 'https://api.transcoin.io/v1/process/' \
 | № | Parameter name | Type   | Description                                             |   |
 |---|----------------|--------|---------------------------------------------------------|---|
 | 1 | partner_id     | int    | Partner ID in our system (required)                     |   |
-| 2 | from           | int    | Currency identifier in our system (required)            |   |
-| 3 | to             | int    | Cryptocurrency identifier in our system (required)      |   |
+| 2 | from           | int    | Currency code (required)                                |   |
+| 3 | to             | int    | Cryptocurrency code (required)                          |   |
 | 4 | amount         | float  | Transaction Amount (in crypto currency)                 |   |
 | 5 | receive        | float  | Transaction reciving sum (in EUR or USD)                |   |
 | 6 | autoredirect   | int    | Can take values 0 or 1. Enables automatic redirect      |   |
@@ -678,7 +712,7 @@ parameters json string with the following fields:
 ```javascript
 curl 'https://api.transcoin.io/v1/getCalcComissions/' \
   -H 'Content-Type: application/json' \
-  --data {"from":"2","to":"3","method":"21","amount":"200","partner_id":<your ID>}\
+  --data {"from":"EUR","to":"BTC","method":"skrill",,"amount":"200","partner_id":<your ID>}\
 ```
 >
   
@@ -762,8 +796,8 @@ curl 'https://api.transcoin.io/v1/calcDirectComissions/' \
   -H 'Sign: a70e6e5388f23ff6a6da503a82807f3b' \
   --data {
 	"partner_id":<your ID>, 
-	"from":"3",
-	"to":"2",
+	"from":"BTC",
+	"to":"EUR",
 	"amount":"0",
 	"receive":"200" } \
 ```
