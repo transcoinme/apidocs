@@ -35,8 +35,8 @@ You can specify the following values as a payment method: 'card', 'bank', 'skril
 |---|-----------------|-----------------------------------------------------------------------|---|
 | 1 | card            | Use a bank card to pay for the transaction (visa, mastercard, etc.)   |   |
 | 2 | bank            | Use bank transfer to pay for the transaction (SEPA)                   |   |
-| 3 | skrill          | Use Skrill Money Transfer pay for the transaction                     |   |
-| 4 | neteller        | Use Neteller pay system pay for the transactions                      |   |
+| 3 | skrill          | Use Skrill Money Transfer to pay for the transaction                  |   |
+| 4 | neteller        | Use Neteller pay system to pay for the transactions                   |   |
 
 
 # Request Description
@@ -46,9 +46,9 @@ Request data exchange takes place in json format. So you must prepare the incomi
 ## Method process
 
 Using requests to the process method you can create cryptocurrency exchange transactions. For security reasons, the heading Sign 
-should be added to the request method header. See the [internal link](#Signature creation)'Signature creation' section.
+should be added to the request method header. See the [Signature creation](#signature-creation) section.
 
-The type of operation must be specified in request parameter `type`. The `type` parameter can take such values: `merchant`, `exchange`.
+The type of operation must be specified in request parameter `type`. The `type` parameter can take such values: `merchant`, `exchange`,`token`,`direct`.
 
 * `merchant` - creating request for payment with cryptocurrency; 
 * `exchange` - creating cryptocurrency purchase request;
@@ -686,7 +686,7 @@ Method response returns a fairly large array of data:
 |   |                      |       | id - method identifier in our system;                                                 |   |
 |   |                      |       | name - name of the method;                                                            |   |
 |   |                      |       | com - method commission amount;                                                       |   |
-|   |                      |       | our_com - сумма комиссии за транзакцию;                                               |   |
+|   |                      |       | our_com - amount of the transaction fee to transcoin;                                 |   |
 |   |                      |       | min - the minimum transaction amount;                                                 |   |
 |   |                      |       | lim - maximum transaction amount;                                                     |   |
 |   |                      |       | enable_mes - whether the method is allowed;                                           |   |
