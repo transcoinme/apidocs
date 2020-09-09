@@ -422,6 +422,7 @@ The method returns a response also in json format. Description of the response f
 {
 	"result":true,
 	"exchange_id":22698,
+	"qrcode_url":"<qrcode_url>",
 	"data":{
 		"sum_from":"0.03157722",
 		"sum_with_com":"0.02990336",
@@ -452,7 +453,8 @@ The method returns a response also in json format. Description of the response f
 |---|----------------|--------|---------------------------------------------------------|---|
 | 1 | result         | bool   | Accepts true if the request succeeds.                   |   |
 | 2 | exchange_id    | int    | ID of new exchange transaction in our system            |   |
-| 3 | data           | array  | array with exchange and comissions data:                |   |
+| 3 | qrcode_url     | string | QRcode URL on our server                                |   |
+| 4 | data           | array  | array with exchange and comissions data:                |   |
 |   |                | float  | sum_from - transaction Amount                           |   |
 |   |                | float  | sum_with_com - transaction Amount minus comissions      |   |
 |   |                | float  | com_valut_from - sum of valut from comission            |   |
