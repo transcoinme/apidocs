@@ -1391,6 +1391,7 @@ if both are specified, priority will be given to &#39;amount&#39;. if both are n
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
     <span class="dl">"</span><span class="s2">result</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">exchange_id</span><span class="dl">"</span><span class="p">:</span><span class="mi">22698</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">qrcode_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">&lt;qrcode_url&gt;</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">:{</span>
         <span class="dl">"</span><span class="s2">sum_from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.03157722</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">sum_with_com</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.02990336</span><span class="dl">"</span><span class="p">,</span>
@@ -1443,6 +1444,13 @@ if both are specified, priority will be given to &#39;amount&#39;. if both are n
 </tr>
 <tr>
 <td>3</td>
+<td>qrcode_url</td>
+<td>string</td>
+<td>QRcode URL on our server</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
 <td>data</td>
 <td>array</td>
 <td>array with exchange and comissions data:</td>
