@@ -642,42 +642,42 @@ should be added to the request method header. See the <a href="#signature-creati
 <td>2</td>
 <td>wallet</td>
 <td>string</td>
-<td>Wallet to send cryptocurrency</td>
+<td>Wallet to send cryptocurrency (optional)</td>
 <td></td>
 </tr>
 <tr>
 <td>3</td>
 <td>email</td>
 <td>string</td>
-<td>Customer Email</td>
+<td>Customer Email (optional)</td>
 <td></td>
 </tr>
 <tr>
 <td>4</td>
 <td>method</td>
 <td>int</td>
-<td>ID of the payment method in our system</td>
+<td>ID of the payment method in our system (required)</td>
 <td></td>
 </tr>
 <tr>
 <td>5</td>
 <td>from</td>
 <td>int</td>
-<td>Currency code</td>
+<td>Currency code (required)</td>
 <td></td>
 </tr>
 <tr>
 <td>6</td>
 <td>to</td>
 <td>int</td>
-<td>Cryptocurrency code</td>
+<td>Cryptocurrency code (required)</td>
 <td></td>
 </tr>
 <tr>
 <td>7</td>
 <td>amount</td>
 <td>float</td>
-<td>Transaction Amount (in EUR or USD)</td>
+<td>Transaction Amount (in EUR or USD, required)</td>
 <td></td>
 </tr>
 <tr>
@@ -873,8 +873,8 @@ should be added to the request method header. See the <a href="#signature-creati
     <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;user email here&gt;</span><span class="dl">"</span> 
     <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;your wallet here&gt;</span><span class="dl">"</span><span class="p">,</span> 
     <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;transaction_success_url&gt;</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;transaction_fail_url&gt;</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">lang_code</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">en</span><span class="dl">"</span> <span class="p">}</span> <span class="o">\</span>
 </code></pre></div>
 <blockquote>
