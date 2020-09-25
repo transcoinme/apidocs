@@ -248,6 +248,9 @@
               </ul>
           </li>
           <li>
+            <a href="#transaction-statuses" class="toc-h1 toc-link" data-title="Transaction statuses">Transaction statuses</a>
+          </li>
+          <li>
             <a href="#signature-creation" class="toc-h1 toc-link" data-title="Signature creation">Signature creation</a>
           </li>
           <li>
@@ -315,7 +318,9 @@ You can specify the following values as a payment method: &#39;card&#39;, &#39;b
 </tr>
 </tbody></table>
 <h1 id='request-description'>Request Description</h1>
-<p>Request data exchange takes place in json format. So you must prepare the incoming data accordingly, and also decrypt the response.</p>
+<p>Request data exchange takes place in json format. So you must prepare the incoming data accordingly, and also decrypt the response.
+Successful requests accepted by our system lead to the creation of transactions or their status changes. 
+Description of transaction statuses is given in the corresponding <a href="#transaction-statuses">paragraph</a></p>
 <h2 id='method-process'>Method process</h2>
 <p>Using requests to the process method you can create cryptocurrency exchange transactions. For security reasons, the heading Sign 
 should be added to the request method header. See the <a href="#signature-creation">Signature creation</a> section.</p>
@@ -348,8 +353,8 @@ should be added to the request method header. See the <a href="#signature-creati
     <span class="dl">"</span><span class="s2">order_number</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">24</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">description</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">Order Payment #24</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;transaction_success_url&gt;</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;transaction_fail_url&gt;</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">date</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">01-06-2020 20:39:32</span><span class="dl">"</span><span class="p">}</span> <span class="err">\</span> 
 </code></pre></div>
 <blockquote>
@@ -615,8 +620,8 @@ should be added to the request method header. See the <a href="#signature-creati
     <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">wallet</span><span class="o">&gt;</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your_email@example.com</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;transaction_success_url&gt;</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;transaction_fail_url&gt;</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">partner_id</span><span class="dl">"</span><span class="p">:</span><span class="o">&lt;</span><span class="nx">your</span> <span class="nx">ID</span><span class="o">&gt;</span> <span class="p">}</span> <span class="err">\</span> 
 </code></pre></div>
 <blockquote>
@@ -1214,8 +1219,8 @@ In both cases, the structure of requests is identical, only currencies and amoun
     <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">}</span> <span class="o">\</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;transaction_success_url&gt;</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;transaction_fail_url&gt;</span><span class="dl">"</span><span class="p">}</span> <span class="o">\</span>
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -1307,8 +1312,8 @@ In both cases, the structure of requests is identical, only currencies and amoun
     <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">receive</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">100</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">autoredirect</span><span class="dl">"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_success_url&gt;</span><span class="dl">'</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">'</span><span class="s1">&lt;transaction_fail_url&gt;</span><span class="dl">'</span><span class="p">}</span> <span class="o">\</span>
+    <span class="dl">"</span><span class="s2">success_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;transaction_success_url&gt;</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">fail_url</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">&lt;transaction_fail_url&gt;</span><span class="dl">"</span><span class="p">}</span> <span class="o">\</span>
 </code></pre></div>
 <blockquote>
 </blockquote>
@@ -2665,6 +2670,43 @@ As a result, you will receive a response similar to the response of  method &#39
 <td></td>
 </tr>
 </tbody></table>
+<h1 id='transaction-statuses'>Transaction statuses</h1>
+<p>Any transaction in our system can be in 4 statuses: &quot;new&quot;,&quot;pending&quot;,&quot;success&quot;,&quot;cancel&quot;.
+The table below provides a description of each status.</p>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Status name</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>new</td>
+<td>All new transactions receive this status. No action has been taken on the transaction yet</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>pending</td>
+<td>Transaction receives this status after successful payment by  user</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>success</td>
+<td>This status means that the transaction has been successfully completed</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>cancel</td>
+<td>Means that the transaction failed or was canceled by the user</td>
+<td></td>
+</tr>
+</tbody></table>
 <h1 id='signature-creation'>Signature creation</h1>
 <p>For security reasons, the heading Sign should be added to the request method header.
 The sign is formed by receiving the MD5 hash of your API key and json request string:</p>
@@ -2724,7 +2766,7 @@ to which the webhook will be sent.</p>
 <td></td>
 </tr>
 <tr>
-<td>3</td>
+<td>4</td>
 <td>message</td>
 <td>string</td>
 <td>Optional. Change status message</td>
