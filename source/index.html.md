@@ -25,7 +25,7 @@ This guide provides examples of queries for various purposes:
 
 You can use any means to create API requests. In this guide, curl-based queries will be given as examples.
 
-#Cuurencies and pay methods
+#Curencies and pay methods
 
 At the moment, you can make exchange transactions in the following currencies 'USD','EUR' and crypto currencies 'BTC','ETH','LTC','XRP'.
 Enter the appropriate currency codes in the fields 'from', 'to'.
@@ -42,6 +42,8 @@ You can specify the following values as a payment method: 'card', 'bank', 'skril
 # Request Description
 
 Request data exchange takes place in json format. So you must prepare the incoming data accordingly, and also decrypt the response.
+Successful requests accepted by our system lead to the creation of transactions or their status changes. 
+Description of transaction statuses is given in the corresponding [paragraph](#transaction-statuses)
 
 ## Method process
 
@@ -74,8 +76,8 @@ curl 'https://api.transcoin.io/v1/process/' \
     "order_number" : 24,
     "description" : "Order Payment #24",
 	"autoredirect": 1,
-    "success_url": '<transaction_success_url>',
-    "fail_url": '<transaction_fail_url>',
+    "success_url": "<transaction_success_url>",
+    "fail_url": "<transaction_fail_url>",
     "date" : "01-06-2020 20:39:32"} \ 
 ```
 >
@@ -167,8 +169,8 @@ curl 'https://api.transcoin.io/v1/process/' \
 	"wallet":<your wallet>,
 	"email":"your_email@example.com",
 	"autoredirect": 1,
-    "success_url": '<transaction_success_url>',
-    "fail_url": '<transaction_fail_url>',
+    "success_url": "<transaction_success_url>",
+    "fail_url": "<transaction_fail_url>",
 	"partner_id":<your ID> } \ 
 ```
 >
@@ -176,12 +178,12 @@ curl 'https://api.transcoin.io/v1/process/' \
 | № | Parameter name | Type   | Description                                             |   |
 |---|----------------|--------|---------------------------------------------------------|---|
 | 1 | partner_id     | int    | Partner ID in our system (required)                     |   |
-| 2 | wallet         | string | Wallet to send cryptocurrency                           |   |
-| 3 | email          | string | Customer Email                                          |   |
-| 4 | method         | int    | ID of the payment method in our system                  |   |
-| 5 | from           | int    | Currency code                                           |   |
-| 6 | to             | int    | Cryptocurrency code                                     |   |
-| 7 | amount         | float  | Transaction Amount (in EUR or USD)                      |   |
+| 2 | wallet         | string | Wallet to send cryptocurrency (optional)                |   |
+| 3 | email          | string | Customer Email (optional)                               |   |
+| 4 | method         | int    | ID of the payment method in our system (required)       |   |
+| 5 | from           | int    | Currency code (required)                                |   |
+| 6 | to             | int    | Cryptocurrency code (required)                          |   |
+| 7 | amount         | float  | Transaction Amount (in EUR or USD, required)            |   |
 | 9 | autoredirect   | int    | Can take values 0 or 1. Enables automatic redirect      |   |
 | 10| success_url    | string | URL redirect address for transactions in success status |   |
 | 11| fail_url       | string | URL redirect address for transactions in fail status    |   |
@@ -251,8 +253,8 @@ curl 'https://api.transcoin.io/v1/process/' \
 	"email" : "<user email here>" 
     "wallet" : "<your wallet here>", 
 	"autoredirect": 1,
-    "success_url": '<transaction_success_url>',
-    "fail_url": '<transaction_fail_url>',
+    "success_url": "<transaction_success_url>",
+    "fail_url": "<transaction_fail_url>",
 	"lang_code" : "en" } \
 ```
 >
@@ -365,8 +367,8 @@ curl 'https://api.transcoin.io/v1/process/' \
 	"to":"BTC",
 	"amount":"100",
 	"autoredirect": 1,
-    "success_url": '<transaction_success_url>',
-    "fail_url": '<transaction_fail_url>'} \
+    "success_url": "<transaction_success_url>",
+    "fail_url": "<transaction_fail_url>"} \
 ```
 >
 
@@ -395,8 +397,8 @@ curl 'https://api.transcoin.io/v1/process/' \
 	"to":"EUR",
 	"receive":"100",
 	"autoredirect": 1,
-    "success_url": '<transaction_success_url>',
-    "fail_url": '<transaction_fail_url>'} \
+    "success_url": "<transaction_success_url>",
+    "fail_url": "<transaction_fail_url>"} \
 ```
 >
 
@@ -453,7 +455,7 @@ The method returns a response also in json format. Description of the response f
 |---|----------------|--------|---------------------------------------------------------|---|
 | 1 | result         | bool   | Accepts true if the request succeeds.                   |   |
 | 2 | exchange_id    | int    | ID of new exchange transaction in our system            |   |
-| 3 | qrcode_url     | string | QRcode URL on our server                                |   |
+| 3 | qrcode_url     | string | QRcode URL on our server (only for sell transaction)    |   |
 | 4 | data           | array  | array with exchange and comissions data:                |   |
 |   |                | float  | sum_from - transaction Amount                           |   |
 |   |                | float  | sum_with_com - transaction Amount minus comissions      |   |
@@ -893,6 +895,18 @@ If the result is negative, the method will return a responce with the following 
 | 2 | error          | int    | Error Code (optional)                                 |   |
 | 3 | message        | string | Error message                                         |   |
 
+# Transaction statuses
+
+Any transaction in our system can be in 4 statuses: "new","pending","success","cancel".
+The table below provides a description of each status.
+
+| № | Status name    | Description                                                          |   |
+|---|----------------|----------------------------------------------------------------------|---|
+| 1 | new            | All new transactions receive this status. No action has been taken on the transaction yet |   |
+| 2 | pending        | Transaction receives this status after successful payment by  user   |   |
+| 3 | success        | This status means that the transaction has been successfully completed |   |
+| 4 | cancel         | Means that the transaction failed or was canceled by the user        |   |
+
 # Signature creation
 
 For security reasons, the heading Sign should be added to the request method header.
@@ -929,6 +943,6 @@ to which the webhook will be sent.
 | 1 | id             | int    | Transaction ID in our system                                         |   |
 | 2 | status         | string | Transaction status at WHICH status of the transaction has changed    |   |
 | 3 | type           | string | Transaction type can take the following values: exchange,merchant    |   |
-| 3 | message        | string | Optional. Change status message                                      |   |
+| 4 | message        | string | Optional. Change status message                                      |   |
 
 Each web hook has a signature in the header. See section 'Signature creation'.
