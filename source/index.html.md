@@ -521,7 +521,7 @@ your project_id and transaction_id as input data and returns response a string i
 | 1 | result         | bool   | Accepts true if the request succeeds.                 |   |
 | 2 | data           | array  | Array with response data. Such structure              |   |
 | 3 | id             | int    | ID of transaction                                     |   |
-| 4 | status         | string | Status. May be "new","pending","success","cancel"     |   |
+| 4 | status         | string | Transaction status. See the description of transaction statuses in the corresponding [paragraph](#transaction-statuses)|   |
 | 5 | test           | bool   | Sign of a test order. If true, the order is test.     |   |
 
 
