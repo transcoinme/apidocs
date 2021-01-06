@@ -27,7 +27,7 @@ You can use any means to create API requests. In this guide, curl-based queries 
 
 #Curencies and pay methods
 
-At the moment, you can make exchange transactions in the following currencies 'USD','EUR' and crypto currencies 'BTC','ETH','LTC','XRP'.
+At the moment, you can make exchange transactions in the following currencies 'USD','EUR' and crypto currencies 'BTC','ETH','LTC'.
 Enter the appropriate currency codes in the fields 'from', 'to'.
 You can specify the following values as a payment method: 'card', 'bank', 'skrill', 'neteller'. Explanation in the table below.
 
@@ -298,7 +298,7 @@ The method returns a response also in json format. Description of the response f
 		"to_name":"EUR",
 		"method_name":"card"
 		"wallet":"your wallet here",
-		"status":0,
+		"status":"new",
 		"order_url":"\/<request ID>\/",
 		"test":true
 	}
@@ -325,7 +325,7 @@ The method returns a response also in json format. Description of the response f
 |14 | to_name        | string | Currency code                                         |   |
 |14 | method_name    | string | Pay method name in our system                         |   |
 |15 | wallet         | string | Wallet to send cryptocurrency                         |   |
-|16 | status         | int    | ID of transaction status                              |   |
+|16 | status         | int    | Transaction status. See the description of transaction statuses in the corresponding [paragraph](#transaction-statuses)|   |
 |17 | order_url      | string | Order URL                                             |   |
 |18 | test           | bool   | Sign of a test order. If true, the order is test.     |   |
 
@@ -587,7 +587,7 @@ as input data and returns response a string in json format.
 | 1 | result         | bool   | Accepts true if the request succeeds.                 |   |
 | 2 | data           | array  | Array with response data. Such structure              |   |
 | 3 | id             | int    | ID of exchange                                        |   |
-| 4 | status         | string | Status. May be "new","pending","success","cancel"     |   |
+| 4 | status         | string | Transaction status. See the description of transaction statuses in the corresponding [paragraph](#transaction-statuses)|   |
 | 5 | test           | bool   | Sign of a test order. If true, the order is test.     |   |
 
 
@@ -941,7 +941,7 @@ to which the webhook will be sent.
 | № | Parameter name | Type   | Description                                                          |   |
 |---|----------------|--------|----------------------------------------------------------------------|---|
 | 1 | id             | int    | Transaction ID in our system                                         |   |
-| 2 | status         | string | Transaction status at WHICH status of the transaction has changed    |   |
+| 2 | status         | string | Transaction [status](#transaction-statuses) at WHICH status of the transaction has changed    |   |
 | 3 | type           | string | Transaction type can take the following values: exchange,merchant    |   |
 | 4 | message        | string | Optional. Change status message                                      |   |
 

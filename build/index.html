@@ -280,7 +280,7 @@ This guide provides examples of queries for various purposes: </p>
 
 <p>You can use any means to create API requests. In this guide, curl-based queries will be given as examples.</p>
 <h1 id='curencies-and-pay-methods'>Curencies and pay methods</h1>
-<p>At the moment, you can make exchange transactions in the following currencies &#39;USD&#39;,&#39;EUR&#39; and crypto currencies &#39;BTC&#39;,&#39;ETH&#39;,&#39;LTC&#39;,&#39;XRP&#39;.
+<p>At the moment, you can make exchange transactions in the following currencies &#39;USD&#39;,&#39;EUR&#39; and crypto currencies &#39;BTC&#39;,&#39;ETH&#39;,&#39;LTC&#39;.
 Enter the appropriate currency codes in the fields &#39;from&#39;, &#39;to&#39;.
 You can specify the following values as a payment method: &#39;card&#39;, &#39;bank&#39;, &#39;skrill&#39;, &#39;neteller&#39;. Explanation in the table below.</p>
 
@@ -991,7 +991,7 @@ should be added to the request method header. See the <a href="#signature-creati
         <span class="dl">"</span><span class="s2">to_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">method_name</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">card</span><span class="dl">"</span>
         <span class="dl">"</span><span class="s2">wallet</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">your wallet here</span><span class="dl">"</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">new</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">order_url</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="se">\</span><span class="s2">/&lt;request ID&gt;</span><span class="se">\</span><span class="s2">/</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">test</span><span class="dl">"</span><span class="p">:</span><span class="kc">true</span>
     <span class="p">}</span>
@@ -1136,7 +1136,7 @@ should be added to the request method header. See the <a href="#signature-creati
 <td>16</td>
 <td>status</td>
 <td>int</td>
-<td>ID of transaction status</td>
+<td>Transaction status. See the description of transaction statuses in the corresponding <a href="#transaction-statuses">paragraph</a></td>
 <td></td>
 </tr>
 <tr>
@@ -1843,7 +1843,7 @@ as input data and returns response a string in json format.</p>
 <td>4</td>
 <td>status</td>
 <td>string</td>
-<td>Status. May be &quot;new&quot;,&quot;pending&quot;,&quot;success&quot;,&quot;cancel&quot;</td>
+<td>Transaction status. See the description of transaction statuses in the corresponding <a href="#transaction-statuses">paragraph</a></td>
 <td></td>
 </tr>
 <tr>
@@ -2755,7 +2755,7 @@ to which the webhook will be sent.</p>
 <td>2</td>
 <td>status</td>
 <td>string</td>
-<td>Transaction status at WHICH status of the transaction has changed</td>
+<td>Transaction <a href="#transaction-statuses">status</a> at WHICH status of the transaction has changed</td>
 <td></td>
 </tr>
 <tr>
