@@ -2716,20 +2716,25 @@ The sign is formed by receiving the MD5 hash of your API key and json request st
 <p>For <code>merchant</code> transaction you need your &#39;project api key&#39;, for <code>exchange</code>,<code>token</code>,<code>direct</code> transaction
 you need your &#39;partner api key&#39;. You can find it in the settings section in our site.</p>
 <h1 id='webhooks'>Webhooks</h1>
-<p>To track status changes for your transactions, our system can send you a webhook.
+<p>To track status changes for your transactions, our system can send you a webhooks.
 To receive webhooks you need to fill in the fields callback on project settings page or
 api_url_post on your exchange partner settings page. You must enter there the full URL address 
-to which the webhook will be sent.</p>
+to which the webhook will be sent. For example &quot;https://some-where.com/site/webhooks&quot;. The fields 
+contained in the webhook are described in the table below.</p>
 
 <blockquote>
 <p>Request body structure example</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
-    <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">22430</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">failed</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">exchange</span><span class="dl">"</span>
-    <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">""</span>
-
+    <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">22904</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">status</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">dial</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">:</span><span class="dl">""</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">exchange</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">rate</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">8833.77115</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">BTC</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">to</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">76.999973465825</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">sum</span><span class="dl">"</span><span class="p">:</span><span class="dl">"</span><span class="s2">0.00908613</span><span class="dl">"</span>
 <span class="p">}</span>
 </code></pre></div>
 <blockquote>
@@ -2755,7 +2760,7 @@ to which the webhook will be sent.</p>
 <td>2</td>
 <td>status</td>
 <td>string</td>
-<td>Transaction <a href="#transaction-statuses">status</a> at WHICH status of the transaction has changed</td>
+<td>Webhook status that informs you about changes in transaction status</td>
 <td></td>
 </tr>
 <tr>
@@ -2770,6 +2775,84 @@ to which the webhook will be sent.</p>
 <td>message</td>
 <td>string</td>
 <td>Optional. Change status message</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>wallet</td>
+<td>string</td>
+<td>Client&#39;s wallet to which / from which the cryptocurrency will be transferred</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>from</td>
+<td>string</td>
+<td>Currency for conversion (e.g. EUR,USD or BTC, ETH...)</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>to</td>
+<td>string</td>
+<td>Currency to be converted (e.g. EUR,USD or BTC, ETH...)</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>rate</td>
+<td>string</td>
+<td>Exchange rate</td>
+<td></td>
+</tr>
+<tr>
+<td>9</td>
+<td>amount</td>
+<td>float</td>
+<td>Total amount that the client will receive (including commissions)</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>sum</td>
+<td>float</td>
+<td>Initial currency amount</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>Description of webhook statuses</p>
+
+<table><thead>
+<tr>
+<th>№</th>
+<th>Parameter name</th>
+<th>Description</th>
+<th></th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>pending</td>
+<td>The transaction has been paid and is awaiting confirmation</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>dial</td>
+<td>There was an actual purchase / sale of cryptocurrency</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>success</td>
+<td>Transaction successful (received confirmation, money sent)</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>failed</td>
+<td>Transaction canceled</td>
 <td></td>
 </tr>
 </tbody></table>
