@@ -965,4 +965,4 @@ Description of webhook statuses
 | 3 | success        | Transaction successful (received confirmation, money sent)           |   |
 | 4 | failed         | Transaction canceled                                                 |   |
 
-Each web hook has a signature in the header. See section 'Signature creation'.
+Each web hook has a signature in the header. See the [Signature creation](#signature-creation) section.
