@@ -919,20 +919,25 @@ you need your 'partner api key'. You can find it in the settings section in our 
 
 # Webhooks
 
-To track status changes for your transactions, our system can send you a webhook.
+To track status changes for your transactions, our system can send you a webhooks.
 To receive webhooks you need to fill in the fields callback on project settings page or
 api_url_post on your exchange partner settings page. You must enter there the full URL address 
-to which the webhook will be sent.
+to which the webhook will be sent. For example "https://some-where.com/site/webhooks". The fields 
+contained in the webhook are described in the table below.
 
 > Request body structure example
 
 ```javascript
 {
-	"id":"22430",
-	"status":"failed",
-	"type":"exchange"
-	"message":""
-
+	"id":"22904",
+	"status":"dial",
+	"message":"",
+	"type":"exchange",
+	"rate":"8833.77115",
+	"from":"BTC",
+	"to":"EUR",
+	"amount":"76.999973465825",
+	"sum":"0.00908613"
 }
 ```
 
@@ -941,8 +946,23 @@ to which the webhook will be sent.
 | № | Parameter name | Type   | Description                                                          |   |
 |---|----------------|--------|----------------------------------------------------------------------|---|
 | 1 | id             | int    | Transaction ID in our system                                         |   |
-| 2 | status         | string | Transaction [status](#transaction-statuses) at WHICH status of the transaction has changed    |   |
+| 2 | status         | string | Webhook status that informs you about changes in transaction status  |   |
 | 3 | type           | string | Transaction type can take the following values: exchange,merchant    |   |
 | 4 | message        | string | Optional. Change status message                                      |   |
+| 5 | wallet         | string | Client's wallet to which / from which the cryptocurrency will be transferred |   |
+| 6 | from           | string | Currency for conversion (e.g. EUR,USD or BTC, ETH...)                |   |
+| 7 | to             | string | Currency to be converted (e.g. EUR,USD or BTC, ETH...)               |   |
+| 8 | rate           | string | Exchange rate                                                        |   |
+| 9 | amount         | float  | Total amount that the client will receive (including commissions)    |   |
+| 10| sum            | float  | Initial currency amount                                              |   |
+
+Description of webhook statuses
+
+| № | Parameter name | Description                                                          |   |
+|---|----------------|----------------------------------------------------------------------|---|
+| 1 | pending        | The transaction has been paid and is awaiting confirmation           |   |
+| 2 | dial           | There was an actual purchase / sale of cryptocurrency                |   |
+| 3 | success        | Transaction successful (received confirmation, money sent)           |   |
+| 4 | failed         | Transaction canceled                                                 |   |
 
 Each web hook has a signature in the header. See section 'Signature creation'.
